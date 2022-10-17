@@ -25,13 +25,18 @@ public class UserService {
     }
 
     public Optional<User> getSingleUserById(Long id){
-        return userRepository.findById(id);
+        var user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new RecordNotFoundException("User with id "+id+" doesn't exist.");
+        }
+        return user;
     }
 
     public User createUser(UserCreationRequest userCreationRequest){
         var user = new User();
         user.setUsername(userCreationRequest.getUsername());
         user.setPassword(userCreationRequest.getPassword());
+        userRepository.save(user);
         return user;
     }
 
