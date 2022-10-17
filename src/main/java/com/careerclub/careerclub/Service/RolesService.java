@@ -5,6 +5,7 @@ import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Repositories.RolesRepository;
+import com.careerclub.careerclub.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,9 +15,11 @@ import java.util.Optional;
 @Service
 public class RolesService {
     private final RolesRepository rolesRepository;
+    private final UserRepository userRepository;
 
-    public RolesService(RolesRepository rolesRepository) {
+    public RolesService(RolesRepository rolesRepository, UserRepository userRepository) {
         this.rolesRepository = rolesRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Roles> getAllRoles(){
@@ -66,6 +69,10 @@ public class RolesService {
         });
 
         return validate;
+
+    }
+
+    public HashMap<Object,Object> addRoleToUser(){
 
     }
 
