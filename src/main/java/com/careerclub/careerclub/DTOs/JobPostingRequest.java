@@ -1,31 +1,16 @@
-package com.careerclub.careerclub.Entities;
+package com.careerclub.careerclub.DTOs;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="JobPosting")
-public class Job {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class JobPostingRequest {
+
     private String description;
     private String title;
     private String qualification;
-    @CreationTimestamp
-    private LocalDateTime datePosted;
     private String deadline;
     private String jobType;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getDescription() {
         return description;
@@ -49,14 +34,6 @@ public class Job {
 
     public void setQualification(String qualification) {
         this.qualification = qualification;
-    }
-
-    public LocalDateTime getDatePosted() {
-        return datePosted;
-    }
-
-    public void setDatePosted(LocalDateTime datePosted) {
-        this.datePosted = datePosted;
     }
 
     public String getDeadline() {
