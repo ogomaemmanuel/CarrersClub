@@ -1,6 +1,7 @@
 package com.careerclub.careerclub.Controllers;
 
 import com.careerclub.careerclub.DTOs.JobPostingRequest;
+import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
 import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Service.JobsService;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,8 @@ public class JobsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody Job job){
-        return ResponseEntity.of(jobsService.updateJob(id, job));
+    public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody JobUpdatingRequest jobUpdatingRequest){
+        return ResponseEntity.of(jobsService.updateJob(id, jobUpdatingRequest));
     }
 
 }
