@@ -1,10 +1,12 @@
 package com.careerclub.careerclub.Service;
 
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
+import com.careerclub.careerclub.DTOs.AddRoleToUserRequest;
 import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Repositories.RolesRepository;
+import com.careerclub.careerclub.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,9 +16,11 @@ import java.util.Optional;
 @Service
 public class RolesService {
     private final RolesRepository rolesRepository;
+    private final UserRepository userRepository;
 
-    public RolesService(RolesRepository rolesRepository) {
+    public RolesService(RolesRepository rolesRepository, UserRepository userRepository) {
         this.rolesRepository = rolesRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Roles> getAllRoles(){
@@ -67,6 +71,23 @@ public class RolesService {
 
         return validate;
 
+    }
+
+    public HashMap<Object,Object> addRoleToUser(AddRoleToUserRequest addRoleToUserRequest){
+        var validate = new HashMap<>();
+        var user = userRepository.findById(addRoleToUserRequest.getUserId());
+        var role = rolesRepository.findByName(addRoleToUserRequest.getRoleName());
+        user.ifPresentOrElse(u->{
+            if(role==null){
+                throw new RecordNotFoundException("Role with name, "+addRoleToUserRequest.getRoleName()+" doesn't exist 🚫");
+            }
+            u.addRole(role);
+            userRepository.save(u);
+            validate.put("message","Role "+role.getName()+" added successfully to user with the username "+ u.getUsername()+" ✅");
+        },()->{
+            throw new RecordNotFoundException("User with id, "+addRoleToUserRequest.getUserId()+" doesn't exist 🚫");
+        });
+        return validate;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Controllers;
 
+import com.careerclub.careerclub.DTOs.AddRoleToUserRequest;
 import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
@@ -47,6 +48,12 @@ public class RolesController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HashMap<Object,Object>> deleteRole(@PathVariable Long id){
         var validate = rolesService.deleteRole(id);
+        return ResponseEntity.ok(validate);
+    }
+
+    @PostMapping("/add-role")
+    public ResponseEntity<HashMap<Object,Object>> addRoleToUser(@Valid @RequestBody AddRoleToUserRequest addRoleToUserRequest){
+        var validate = rolesService.addRoleToUser(addRoleToUserRequest);
         return ResponseEntity.ok(validate);
     }
 
