@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Service;
 
+import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Repositories.RolesRepository;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,13 @@ public class RolesService {
     public Optional<Roles> getSingleRoleByName(String name){
         var role = rolesRepository.findByName(name);
         return Optional.ofNullable(role);
+    }
+
+    public Roles createRole(RolesCreationRequest rolesCreationRequest){
+        var role = new Roles();
+        role.setName(rolesCreationRequest.getName());
+        rolesRepository.save(role);
+        return role;
     }
 
 }
