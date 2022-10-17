@@ -6,6 +6,7 @@ import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Repositories.RolesRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,20 @@ public class RolesService {
             rolesRepository.save(r);
         });
         return role;
+    }
+
+    public HashMap<Object, Object> deleteRole(Long id){
+        var validate = new HashMap<>();
+        var role = rolesRepository.findById(id);
+        role.ifPresentOrElse(r->{
+            rolesRepository.delete(r);
+            validate.put("message","Role Deleted Successfully ✅");
+        },()->{
+            validate.put("message","Role Doesn't Exist 😐");
+        });
+
+        return validate;
+
     }
 
 }
