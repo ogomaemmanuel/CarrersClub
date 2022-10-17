@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Entities;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -18,6 +19,19 @@ public class Job {
     private LocalDateTime datePosted;
     private String deadline;
     private String jobType;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "companyId")
+
+    private Company company;
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 
     public Long getId() {
         return id;
