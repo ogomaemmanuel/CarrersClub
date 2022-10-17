@@ -28,7 +28,7 @@ public class RolesService {
         if (role!=null) {
             return role;
         }
-        throw new RecordNotFoundException("Role with name "+name+ "doesn't exist 🚫");
+        throw new RecordNotFoundException("Role with name, "+name+ ",doesn't exist 🚫");
     }
 
     public Roles createRole(RolesCreationRequest rolesCreationRequest){
@@ -39,7 +39,7 @@ public class RolesService {
             rolesRepository.save(role);
             return role;
         }
-        throw new RecordNotFoundException("Role with name "+rolesCreationRequest.getName()+" already exists.");
+        throw new RecordNotFoundException("Role with name, "+rolesCreationRequest.getName()+", already exists.");
     }
 
     public Optional<Roles> updateRole(Long id, RolesUpdateRequest rolesUpdateRequest){
@@ -49,7 +49,7 @@ public class RolesService {
             r.setName(rolesUpdateRequest.getName());
             rolesRepository.save(r);
         },()->{
-            throw new RecordNotFoundException("Role doesn't exist 🚫");
+            throw new RecordNotFoundException("Role with id "+id+" doesn't exist 🚫");
         });
 
         return role;
@@ -62,7 +62,7 @@ public class RolesService {
             rolesRepository.delete(r);
             validate.put("message","Role Deleted Successfully ✅");
         },()->{
-            throw new RecordNotFoundException("Role doesn't exist 🚫");
+            throw new RecordNotFoundException("Role with id "+id+" doesn't exist 🚫");
         });
 
         return validate;
