@@ -1,25 +1,11 @@
 package com.careerclub.careerclub.DTOs;
 
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
-
-public class JobPostingRequest {
-
+public class JobUpdatingRequest {
     private String description;
     private String title;
     private String qualification;
     private String deadline;
     private String jobType;
-    private Long companyId;
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
 
     public String getDescription() {
         return description;
