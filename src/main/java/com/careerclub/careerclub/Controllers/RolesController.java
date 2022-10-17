@@ -51,7 +51,7 @@ public class RolesController {
         return ResponseEntity.ok(validate);
     }
 
-    @PostMapping
+    @PostMapping("/add-role")
     public ResponseEntity<HashMap<Object,Object>> addRoleToUser(@Valid @RequestBody AddRoleToUserRequest addRoleToUserRequest){
         var validate = rolesService.addRoleToUser(addRoleToUserRequest);
         return ResponseEntity.ok(validate);
