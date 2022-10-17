@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -41,6 +42,12 @@ public class RolesController {
     public ResponseEntity<Roles> updateRole(@PathVariable Long id, @Valid @RequestBody RolesUpdateRequest rolesUpdateRequest){
         var role = rolesService.updateRole(id,rolesUpdateRequest);
         return ResponseEntity.of(role);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HashMap<Object,Object>> deleteRole(@PathVariable Long id){
+        var validate = rolesService.deleteRole(id);
+        return ResponseEntity.ok(validate);
     }
 
 }
