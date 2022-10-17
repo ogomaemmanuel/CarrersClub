@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Service;
 
+import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
@@ -22,24 +23,35 @@ public class RolesService {
         return rolesRepository.findAll();
     }
 
-    public Optional<Roles> getSingleRoleByName(String name){
+    public Roles getSingleRoleByName(String name){
         var role = rolesRepository.findByName(name);
-        return Optional.ofNullable(role);
+        if (role!=null) {
+            return role;
+        }
+        throw new RecordNotFoundException("Role with name "+name+ "doesn't exist 🚫");
     }
 
     public Roles createRole(RolesCreationRequest rolesCreationRequest){
-        var role = new Roles();
-        role.setName(rolesCreationRequest.getName());
-        rolesRepository.save(role);
-        return role;
+        var fetchRole = rolesRepository.findByName(rolesCreationRequest.getName());
+        if(fetchRole==null) {
+            var role = new Roles();
+            role.setName(rolesCreationRequest.getName());
+            rolesRepository.save(role);
+            return role;
+        }
+        throw new RecordNotFoundException("Role with name "+rolesCreationRequest.getName()+" already exists.");
     }
 
     public Optional<Roles> updateRole(Long id, RolesUpdateRequest rolesUpdateRequest){
         var role = rolesRepository.findById(id);
-        role.ifPresent(r->{
+
+        role.ifPresentOrElse(r->{
             r.setName(rolesUpdateRequest.getName());
             rolesRepository.save(r);
+        },()->{
+            throw new RecordNotFoundException("Role doesn't exist 🚫");
         });
+
         return role;
     }
 
@@ -50,7 +62,7 @@ public class RolesService {
             rolesRepository.delete(r);
             validate.put("message","Role Deleted Successfully ✅");
         },()->{
-            validate.put("message","Role Doesn't Exist 😐");
+            throw new RecordNotFoundException("Role doesn't exist 🚫");
         });
 
         return validate;

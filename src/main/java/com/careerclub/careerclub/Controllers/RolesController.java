@@ -29,7 +29,7 @@ public class RolesController {
     @GetMapping("/{name}")
     public ResponseEntity<Roles> getSingleRoleByName(@PathVariable String name){
         var role = rolesService.getSingleRoleByName(name);
-        return ResponseEntity.of(role);
+        return ResponseEntity.ok(role);
     }
 
     @PostMapping
