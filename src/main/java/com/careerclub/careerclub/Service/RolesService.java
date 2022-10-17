@@ -5,6 +5,7 @@ import com.careerclub.careerclub.Repositories.RolesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RolesService {
@@ -18,8 +19,9 @@ public class RolesService {
         return rolesRepository.findAll();
     }
 
-    public Roles getSingleRoleByName(String name){
-
+    public Optional<Roles> getSingleRoleByName(String name){
+        var role = rolesRepository.findByName(name);
+        return Optional.ofNullable(role);
     }
 
 }
