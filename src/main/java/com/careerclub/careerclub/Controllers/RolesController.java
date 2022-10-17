@@ -1,6 +1,7 @@
 package com.careerclub.careerclub.Controllers;
 
 import com.careerclub.careerclub.DTOs.RolesCreationRequest;
+import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Service.RolesService;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,12 @@ public class RolesController {
     public ResponseEntity<Roles> createRole(@Valid @RequestBody RolesCreationRequest rolesCreationRequest){
         var role = rolesService.createRole(rolesCreationRequest);
         return ResponseEntity.ok(role);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Roles> updateRole(@PathVariable Long id, @Valid @RequestBody RolesUpdateRequest rolesUpdateRequest){
+        var role = rolesService.updateRole(id,rolesUpdateRequest);
+        return ResponseEntity.of(role);
     }
 
 }
