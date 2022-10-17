@@ -1,6 +1,7 @@
 package com.careerclub.careerclub.Service;
 
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
+import com.careerclub.careerclub.DTOs.AddRoleToUserRequest;
 import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
@@ -72,8 +73,21 @@ public class RolesService {
 
     }
 
-    public HashMap<Object,Object> addRoleToUser(){
-
+    public HashMap<Object,Object> addRoleToUser(AddRoleToUserRequest addRoleToUserRequest){
+        var validate = new HashMap<>();
+        var user = userRepository.findById(addRoleToUserRequest.getUserId());
+        var role = rolesRepository.findByName(addRoleToUserRequest.getRoleName());
+        user.ifPresentOrElse(u->{
+            if(role==null){
+                throw new RecordNotFoundException("Role with name, "+addRoleToUserRequest.getRoleName()+" doesn't exist 🚫");
+            }
+            u.addRole(role);
+            userRepository.save(u);
+            validate.put("message","Role "+role.getName()+" added successfully to user with the username "+ u.getUsername()+" ✅");
+        },()->{
+            throw new RecordNotFoundException("User with id, "+addRoleToUserRequest.getUserId()+" doesn't exist 🚫");
+        });
+        return validate;
     }
 
 }
