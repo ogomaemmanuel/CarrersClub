@@ -1,9 +1,11 @@
 package com.careerclub.careerclub.Controllers;
 
+import com.careerclub.careerclub.DTOs.AddRoleToUserRequest;
 import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Service.RolesService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
+@Tag(name = "Roles Controller")
 @RestController
 @RequestMapping("roles")
 public class RolesController {
@@ -47,6 +50,12 @@ public class RolesController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HashMap<Object,Object>> deleteRole(@PathVariable Long id){
         var validate = rolesService.deleteRole(id);
+        return ResponseEntity.ok(validate);
+    }
+
+    @PostMapping("/add-role")
+    public ResponseEntity<HashMap<Object,Object>> addRoleToUser(@Valid @RequestBody AddRoleToUserRequest addRoleToUserRequest){
+        var validate = rolesService.addRoleToUser(addRoleToUserRequest);
         return ResponseEntity.ok(validate);
     }
 

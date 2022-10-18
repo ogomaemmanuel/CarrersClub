@@ -1,12 +1,19 @@
 package com.careerclub.careerclub.Entities;
 
 
+import com.careerclub.careerclub.Config.WebSecurityConfig;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,6 +23,7 @@ public class User {
     @Column(unique = true)
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String email;
@@ -26,9 +34,20 @@ public class User {
 
     private String bio;
 
-    @ManyToMany
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
-    private Set<Roles> roles;
+    private List<Roles> roles;
 
     public Long getId() {
         return id;
@@ -50,8 +69,37 @@ public class User {
         return username;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        for(Roles role: this.getRoles()){
+            authorities.add(role);
+        }
+        return authorities;
     }
 
     public String getPassword() {
@@ -94,16 +142,21 @@ public class User {
         this.bio = bio;
     }
 
-    public Set<Roles> getRoles() {
-        return roles;
+    public List<Roles> getRoles() {
+        return roles==null? new ArrayList<Roles>() :roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
+    public void setRoles(List<Roles> roles) {
         this.roles = roles;
     }
 
     public void addRole(Roles role){
         this.getRoles().add(role);
+    }
+
+    @PrePersist
+    public void encryptPassword(){
+        this.password = WebSecurityConfig.passwordEncoder().encode(this.password);
     }
 
 }
