@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CodeRepository extends JpaRepository<Code,Long> {
     Code findByUser(User user);
+    void deleteAllByUserId(Long id);
 }
