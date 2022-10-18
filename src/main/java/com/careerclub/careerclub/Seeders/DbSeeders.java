@@ -7,10 +7,12 @@ import com.careerclub.careerclub.Repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 @Component
+@Transactional
 public class DbSeeders implements CommandLineRunner {
 
 
