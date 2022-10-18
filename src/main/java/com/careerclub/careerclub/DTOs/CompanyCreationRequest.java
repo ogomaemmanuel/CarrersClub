@@ -1,18 +1,10 @@
 package com.careerclub.careerclub.DTOs;
 
 public class CompanyCreationRequest {
-    private Long companyId;
+
     private String name;
     private String description;
     private String link;
-
-    public Long getCompanyId(){
-        return companyId;
-    }
-
-     public void setCompanyId(Long companyId){
-        this.companyId = companyId;
-     }
 
      public String getName(){
         return name;
