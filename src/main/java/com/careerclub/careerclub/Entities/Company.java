@@ -1,6 +1,7 @@
 package com.careerclub.careerclub.Entities;
 
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 @Entity
@@ -13,6 +14,7 @@ public class Company {
 
     private String description;
 
+    @URL
     private String link;
 
     public Long getId(){

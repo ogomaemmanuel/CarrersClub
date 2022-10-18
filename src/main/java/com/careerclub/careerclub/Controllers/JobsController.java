@@ -23,7 +23,7 @@ public class JobsController {
         return  ResponseEntity.ok(jobsService.getAllJobs());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Job> getJobBYId(@PathVariable Long id){
+    public ResponseEntity<Job> getJobById(@PathVariable Long id){
         return ResponseEntity.of(jobsService.getJobById(id));
     }
 
