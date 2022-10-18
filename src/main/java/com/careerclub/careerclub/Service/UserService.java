@@ -36,6 +36,7 @@ public class UserService {
         var user = new User();
         user.setUsername(userCreationRequest.getUsername());
         user.setPassword(userCreationRequest.getPassword());
+        user.setEmail(userCreationRequest.getEmail());
         userRepository.save(user);
         return user;
     }

@@ -5,6 +5,7 @@ import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Service.RolesService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
+@Tag(name = "Roles Controller")
 @RestController
 @RequestMapping("roles")
 public class RolesController {

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -36,12 +38,16 @@ public class RolesServiceTest {
         verify(rolesRepository).findAll();
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvSource(textBlock = """
+            admin,
+            member
+            """)
     @DisplayName("Testing single role retrieval by name")
-    public void test_single_role(){
+    public void test_single_role(String roleName){
         when(rolesRepository.findByName(any(String.class))).thenReturn(new Roles());
-        rolesService.getSingleRoleByName("admin");
-        verify(rolesRepository).findByName("admin");
+        rolesService.getSingleRoleByName(roleName);
+        verify(rolesRepository).findByName(roleName);
     }
 
 

@@ -4,6 +4,7 @@ import com.careerclub.careerclub.DTOs.UserCreationRequest;
 import com.careerclub.careerclub.DTOs.UserUpdateRequest;
 import com.careerclub.careerclub.Entities.User;
 import com.careerclub.careerclub.Service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
+@Tag(name = "Users Controller")
 @RestController
 @RequestMapping("/users")
 public class UserController {
