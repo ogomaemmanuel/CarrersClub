@@ -5,6 +5,7 @@ import com.careerclub.careerclub.Entities.User;
 import com.careerclub.careerclub.Repositories.CodeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -19,5 +20,8 @@ public class CodeService {
         return codeRepository.findAll();
     }
 
+    public HashMap<String, Object> verifyCode(){
+
+    }
 
 }
