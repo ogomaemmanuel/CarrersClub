@@ -32,7 +32,7 @@ public class User implements UserDetails {
 
     private String bio;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     private List<Roles> roles;
 
