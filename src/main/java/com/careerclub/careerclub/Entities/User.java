@@ -7,7 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -83,7 +85,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        for(Roles role: this.getRoles()){
+            authorities.add(role);
+        }
+        return authorities;
     }
 
     public String getPassword() {
@@ -127,7 +133,7 @@ public class User implements UserDetails {
     }
 
     public Set<Roles> getRoles() {
-        return roles;
+        return roles==null? new HashSet<Roles>() :roles;
     }
 
     public void setRoles(Set<Roles> roles) {
