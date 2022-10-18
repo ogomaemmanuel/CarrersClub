@@ -1,6 +1,7 @@
 package com.careerclub.careerclub.Entities;
 
 
+import com.careerclub.careerclub.Config.WebSecurityConfig;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -133,6 +134,11 @@ public class User implements UserDetails {
 
     public void addRole(Roles role){
         this.getRoles().add(role);
+    }
+
+    @PrePersist
+    public void encryptPassword(){
+        this.password = WebSecurityConfig.passwordEncoder().encode(this.password);
     }
 
 }
