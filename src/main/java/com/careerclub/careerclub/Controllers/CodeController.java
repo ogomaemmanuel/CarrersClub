@@ -1,12 +1,12 @@
 package com.careerclub.careerclub.Controllers;
 
+import com.careerclub.careerclub.DTOs.CodeVerificationRequest;
 import com.careerclub.careerclub.Entities.Code;
 import com.careerclub.careerclub.Service.CodeService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,4 +24,9 @@ public class CodeController {
         return ResponseEntity.ok(codes);
     }
 
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyCode(@Valid @RequestBody CodeVerificationRequest codeVerificationRequest){
+        var validate = codeService.verifyCode(codeVerificationRequest);
+        return ResponseEntity.ok(validate);
+    }
 }

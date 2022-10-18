@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Component
 public class Jwtfilter extends OncePerRequestFilter {
@@ -31,7 +34,12 @@ public class Jwtfilter extends OncePerRequestFilter {
             Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
             try{
                 var jwt = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(jwt.getBody().getSubject(),null,new ArrayList<>());
+                var rolesClaimString= jwt.getBody().get("roles");
+                var authorities= new ArrayList<SimpleGrantedAuthority>();
+                if(rolesClaimString!=null){
+                    authorities = (ArrayList<SimpleGrantedAuthority>) Arrays.stream(rolesClaimString.toString().split(";")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+                }
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(jwt.getBody().getSubject(),null,authorities);
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 securityContext.setAuthentication(authToken);
                 SecurityContextHolder.setContext(securityContext);

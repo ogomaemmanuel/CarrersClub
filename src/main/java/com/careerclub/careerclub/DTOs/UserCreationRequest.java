@@ -1,19 +1,9 @@
 package com.careerclub.careerclub.DTOs;
 
 public class UserCreationRequest {
-    private String fullName;
     private String username;
     private String password;
     private String email;
-    private String phoneNumber;
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
 
     public String getUsername() {
         return username;
@@ -37,13 +27,5 @@ public class UserCreationRequest {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 }

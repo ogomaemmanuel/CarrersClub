@@ -29,7 +29,7 @@ public class DbSeeders implements CommandLineRunner {
         var userCount = userRepository.count();
         var roleCount = rolesRepository.count();
         if(roleCount==0){
-            var rolesToAdd = new String[]{"admin", "member"};
+            var rolesToAdd = new String[]{"admin", "member","hr"};
             for(String s:rolesToAdd){
                 var role = new Roles();
                 role.setName(s);
