@@ -2,6 +2,7 @@ package com.careerclub.careerclub.Middlewares;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,12 +19,16 @@ import java.util.ArrayList;
 
 @Component
 public class Jwtfilter extends OncePerRequestFilter {
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var headerValue = request.getHeader("Authorization");
         if(headerValue != null && headerValue.startsWith("Bearer ")){
             var token = headerValue.substring(7);
-            Key key = Keys.hmacShaKeyFor("1234".getBytes());
+            Key key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
             try{
                 var jwt = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(jwt.getBody().getSubject(),null,new ArrayList<>());
