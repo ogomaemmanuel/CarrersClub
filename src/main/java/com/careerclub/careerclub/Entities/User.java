@@ -2,6 +2,7 @@ package com.careerclub.careerclub.Entities;
 
 
 import com.careerclub.careerclub.Config.WebSecurityConfig;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,6 +22,7 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String email;
