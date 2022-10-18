@@ -7,10 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -37,7 +34,7 @@ public class User implements UserDetails {
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_roles")
-    private Set<Roles> roles;
+    private List<Roles> roles;
 
     public Long getId() {
         return id;
@@ -132,11 +129,11 @@ public class User implements UserDetails {
         this.bio = bio;
     }
 
-    public Set<Roles> getRoles() {
-        return roles==null? new HashSet<Roles>() :roles;
+    public List<Roles> getRoles() {
+        return roles==null? new ArrayList<Roles>() :roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
+    public void setRoles(List<Roles> roles) {
         this.roles = roles;
     }
 
