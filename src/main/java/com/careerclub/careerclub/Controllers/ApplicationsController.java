@@ -6,7 +6,6 @@ import com.careerclub.careerclub.DTOs.ApplicationRequest;
 import com.careerclub.careerclub.DTOs.CvDownloadRequest;
 import com.careerclub.careerclub.Entities.Application;
 import com.careerclub.careerclub.Service.ApplicationService;
-
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +34,7 @@ public class ApplicationsController {
     public ResponseEntity<Application> getApplicationById(@PathVariable Long id){
         return ResponseEntity.of(applicationService.getApplicationById(id));
     }
+
     @PostMapping(path = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Application> makeApplication(@RequestParam("file") MultipartFile file, @RequestParam("jobId") Long jobId, @RequestParam("userId") Long userId){
         var application = applicationService.makeAnApplication(file,jobId,userId);

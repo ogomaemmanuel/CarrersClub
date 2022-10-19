@@ -18,6 +18,7 @@ public class Application {
     @JoinColumn(name = "user_id")
     private User user;
 
+
     private String cvPath;
     private String cvFileName;
 
