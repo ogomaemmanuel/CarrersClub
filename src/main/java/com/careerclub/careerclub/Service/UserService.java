@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static com.careerclub.careerclub.Utils.EmailValidator.validate;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -33,12 +35,18 @@ public class UserService {
     }
 
     public User createUser(UserCreationRequest userCreationRequest){
-        var user = new User();
-        user.setUsername(userCreationRequest.getUsername());
-        user.setPassword(userCreationRequest.getPassword());
-        user.setEmail(userCreationRequest.getEmail());
-        userRepository.save(user);
-        return user;
+        var emailIsValid = validate(userCreationRequest.getEmail());
+        if(emailIsValid){
+            var user = new User();
+            user.setUsername(userCreationRequest.getUsername());
+            user.setPassword(userCreationRequest.getPassword());
+            user.setEmail(userCreationRequest.getEmail());
+            userRepository.save(user);
+            return user;
+        }else {
+            throw new RecordNotFoundException("Email format provided is invalid.");
+        }
+
     }
 
     public Optional<User> updateUser(Long id, UserUpdateRequest userUpdateRequest){

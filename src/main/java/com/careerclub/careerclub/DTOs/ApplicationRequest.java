@@ -2,6 +2,7 @@ package com.careerclub.careerclub.DTOs;
 
 import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Entities.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -12,8 +13,7 @@ public class ApplicationRequest {
 
     private Long userId;
 
-    @Lob
-    private byte[] cv;
+    private MultipartFile file;
 
     public Long getJobId() {
         return jobId;
@@ -31,11 +31,11 @@ public class ApplicationRequest {
         this.userId = userId;
     }
 
-    public byte[] getCv() {
-        return cv;
+    public MultipartFile getFile() {
+        return file;
     }
 
-    public void setCv(byte[] cv) {
-        this.cv = cv;
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }

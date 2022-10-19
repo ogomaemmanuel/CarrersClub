@@ -18,23 +18,24 @@ public class Application {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String FilePath;
-    private String FileName;
 
-    public String getImagePath() {
-        return FilePath;
+    private String cvPath;
+    private String cvFileName;
+
+    public String getCvPath() {
+        return cvPath;
     }
 
-    public void setImagePath(String FilePath) {
-        this.FilePath = FilePath;
+    public void setCvPath(String cvPath) {
+        this.cvPath = cvPath;
     }
 
-    public String geFileName() {
-        return FileName;
+    public String getCvFileName() {
+        return cvFileName;
     }
 
-    public void setFileName(String FileName) {
-        this.FileName = FileName;
+    public void setCvFileName(String cvFileName) {
+        this.cvFileName = cvFileName;
     }
 
     public Long getId() {

@@ -1,10 +1,9 @@
 package com.careerclub.careerclub.Auth;
 
-import com.careerclub.careerclub.Config.WebSecurityConfig;
-import com.careerclub.careerclub.Entities.Code;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Repositories.CodeRepository;
 import com.careerclub.careerclub.Repositories.UserRepository;
+import com.careerclub.careerclub.Service.AuthService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import java.sql.Date;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.careerclub.careerclub.Utils.JwtGenerateToken.generateAccessToken;
-import static com.careerclub.careerclub.Utils.OtpCodeGenerator.generate;
 
 @RestController
 @RequestMapping("/auth")
@@ -34,45 +31,25 @@ public class AuthController {
     private final UserRepository userRepository;
     private final CodeRepository codeRepository;
 
+    private final AuthService authService;
+
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     @Value("${jwt.refresh.secret}")
     private String jwtRefreshSecret;
 
-    public AuthController(UserRepository userRepository, CodeRepository codeRepository) {
+    public AuthController(UserRepository userRepository, CodeRepository codeRepository, AuthService authService) {
         this.userRepository = userRepository;
         this.codeRepository = codeRepository;
+        this.authService = authService;
     }
 
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest){
-        var user = userRepository.findByUsername(loginRequest.getUsername());
-        if(user!=null){
-            var rolesClaim=  new HashMap<String,Object>();
-            if(WebSecurityConfig.passwordEncoder().matches(loginRequest.getPassword(),user.getPassword())){
-                //Deletes All Existing codes
-                codeRepository.deleteAllByUserId(user.getId());
-
-                //Generate Code
-                var code = generate();
-
-                //Save Code
-                var newCode = new Code();
-                newCode.setCode(code);
-                newCode.setUser(user);
-                codeRepository.save(newCode);
-
-                //Assign Otp role
-                rolesClaim.put("roles","otp");
-
-                //Token generate
-                var token = generateAccessToken(jwtSecret,user.getUsername(), rolesClaim, Date.from(Instant.now().plusSeconds(300)));
-                return ResponseEntity.ok(Map.of("accessToken",token));
-            }
-        }
-        return ResponseEntity.status(401).build();
+        var token = authService.login(loginRequest);
+        return ResponseEntity.ok(Map.of("accessToken",token));
     }
 
     @PostMapping("/refresh-token")
