@@ -53,7 +53,6 @@ public class UserService {
         var user = userRepository.findById(id);
         user.ifPresentOrElse(u->{
             u.setFullName(userUpdateRequest.getFullName());
-            u.setEmail(userUpdateRequest.getEmail());
             u.setPhoneNumber(userUpdateRequest.getPhoneNumber());
             u.setProfession(userUpdateRequest.getProfession());
             u.setBio(userUpdateRequest.getBio());
