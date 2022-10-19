@@ -18,15 +18,23 @@ public class Application {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Lob
-    private byte[] cv;
+    private String cvPath;
+    private String cvFileName;
 
-    public byte[] getCv() {
-        return cv;
+    public String getCvPath() {
+        return cvPath;
     }
 
-    public void setCv(byte[] cv) {
-        this.cv = cv;
+    public void setCvPath(String cvPath) {
+        this.cvPath = cvPath;
+    }
+
+    public String getCvFileName() {
+        return cvFileName;
+    }
+
+    public void setCvFileName(String cvFileName) {
+        this.cvFileName = cvFileName;
     }
 
     public Long getId() {

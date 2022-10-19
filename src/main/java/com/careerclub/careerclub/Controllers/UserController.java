@@ -5,6 +5,7 @@ import com.careerclub.careerclub.DTOs.UserUpdateRequest;
 import com.careerclub.careerclub.Entities.User;
 import com.careerclub.careerclub.Service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
