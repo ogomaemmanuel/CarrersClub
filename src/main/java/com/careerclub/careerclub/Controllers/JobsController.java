@@ -4,6 +4,7 @@ import com.careerclub.careerclub.DTOs.JobPostingRequest;
 import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
 import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Service.JobsService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
