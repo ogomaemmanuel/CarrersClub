@@ -54,7 +54,6 @@ public class UserService {
     public Optional<User> updateUser(Long id, UserUpdateRequest userUpdateRequest){
         var user = userRepository.findById(id);
         user.ifPresentOrElse(u->{
-            u.setFullName(userUpdateRequest.getFullName());
             u.setPhoneNumber(userUpdateRequest.getPhoneNumber());
             u.setProfession(userUpdateRequest.getProfession());
             u.setBio(userUpdateRequest.getBio());
