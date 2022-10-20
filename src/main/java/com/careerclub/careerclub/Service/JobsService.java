@@ -6,6 +6,8 @@ import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
 import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Repositories.CompanyRepository;
 import com.careerclub.careerclub.Repositories.JobRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class JobsService {
         this.companyRepository = companyRepository;
     }
 
-    public List<Job> getAllJobs(){
-        var jobs = jobRepository.findAll();
+    public Page<Job> getAllJobs(Pageable pageable){
+        var jobs = jobRepository.findAll(pageable);
         return jobs;
     }
 
