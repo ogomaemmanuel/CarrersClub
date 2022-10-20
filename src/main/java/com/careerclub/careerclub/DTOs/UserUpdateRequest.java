@@ -1,6 +1,10 @@
 package com.careerclub.careerclub.DTOs;
 
+import javax.validation.constraints.NotBlank;
+
 public class UserUpdateRequest {
+
+    @NotBlank
     private String fullName;
     private String phoneNumber;
     private String profession;
