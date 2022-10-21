@@ -5,8 +5,11 @@ import com.careerclub.careerclub.DTOs.RolesCreationRequest;
 import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Service.RolesService;
+import com.careerclub.careerclub.Utils.ErrorConverter;
+import com.careerclub.careerclub.Utils.RoleValidator;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,9 +21,11 @@ import java.util.List;
 @RequestMapping("roles")
 public class RolesController {
     private final RolesService rolesService;
+    private final RoleValidator roleValidator;
 
-    public RolesController(RolesService rolesService) {
+    public RolesController(RolesService rolesService, RoleValidator roleValidator) {
         this.rolesService = rolesService;
+        this.roleValidator = roleValidator;
     }
 
     @GetMapping
@@ -36,9 +41,13 @@ public class RolesController {
     }
 
     @PostMapping
-    public ResponseEntity<Roles> createRole(@Valid @RequestBody RolesCreationRequest rolesCreationRequest){
-        var role = rolesService.createRole(rolesCreationRequest);
-        return ResponseEntity.ok(role);
+    public ResponseEntity<?> createRole(@Valid @RequestBody RolesCreationRequest rolesCreationRequest, BindingResult errors){
+        roleValidator.validate(rolesCreationRequest,errors);
+        if(!errors.hasErrors()){
+            var role = rolesService.createRole(rolesCreationRequest);
+            return ResponseEntity.ok(role);
+        }
+        return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
 
     @PutMapping("/{id}")

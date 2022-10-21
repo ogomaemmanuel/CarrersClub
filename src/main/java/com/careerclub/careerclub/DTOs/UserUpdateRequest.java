@@ -1,19 +1,13 @@
 package com.careerclub.careerclub.DTOs;
 
+import javax.validation.constraints.NotBlank;
+
 public class UserUpdateRequest {
-    private String fullName;
+
     private String phoneNumber;
     private String profession;
     private String bio;
-    private String email;
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -39,11 +33,4 @@ public class UserUpdateRequest {
         this.bio = bio;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

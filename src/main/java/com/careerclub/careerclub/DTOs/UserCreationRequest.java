@@ -1,8 +1,19 @@
 package com.careerclub.careerclub.DTOs;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class UserCreationRequest {
+    @NotBlank(message = "Username is required.")
+    @Size(min = 2, message = "Username is too short.")
+    @Size(max = 50, message = "Username is too big.")
     private String username;
+
+    @NotBlank(message = "Password is required.")
+    @Size(min = 8, message = "Password is too short.")
     private String password;
+
+    @NotBlank(message = "Email is required.")
     private String email;
 
     public String getUsername() {

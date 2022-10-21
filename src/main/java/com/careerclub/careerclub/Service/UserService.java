@@ -5,11 +5,13 @@ import com.careerclub.careerclub.DTOs.UserCreationRequest;
 import com.careerclub.careerclub.DTOs.UserUpdateRequest;
 import com.careerclub.careerclub.Entities.User;
 import com.careerclub.careerclub.Repositories.UserRepository;
+import com.careerclub.careerclub.Utils.EmailValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+
 
 import static com.careerclub.careerclub.Utils.EmailValidator.validate;
 
@@ -52,8 +54,6 @@ public class UserService {
     public Optional<User> updateUser(Long id, UserUpdateRequest userUpdateRequest){
         var user = userRepository.findById(id);
         user.ifPresentOrElse(u->{
-            u.setFullName(userUpdateRequest.getFullName());
-            u.setEmail(userUpdateRequest.getEmail());
             u.setPhoneNumber(userUpdateRequest.getPhoneNumber());
             u.setProfession(userUpdateRequest.getProfession());
             u.setBio(userUpdateRequest.getBio());

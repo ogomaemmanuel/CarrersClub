@@ -4,9 +4,12 @@ import com.careerclub.careerclub.DTOs.UserCreationRequest;
 import com.careerclub.careerclub.DTOs.UserUpdateRequest;
 import com.careerclub.careerclub.Entities.User;
 import com.careerclub.careerclub.Service.UserService;
+import com.careerclub.careerclub.Utils.EmailValidator;
+import com.careerclub.careerclub.Utils.ErrorConverter;
+import com.careerclub.careerclub.Utils.UsernameValidator;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,8 +23,14 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final UsernameValidator usernameValidator;
+    private final EmailValidator emailValidator;
+
+
+    public UserController(UserService userService, UsernameValidator usernameValidator, EmailValidator emailValidator) {
         this.userService = userService;
+        this.usernameValidator = usernameValidator;
+        this.emailValidator = emailValidator;
     }
 
     @GetMapping
@@ -37,9 +46,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserCreationRequest userCreationRequest){
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserCreationRequest userCreationRequest, BindingResult errors){
+        usernameValidator.validate(userCreationRequest,errors);
+        emailValidator.validate(userCreationRequest,errors);
+        if(!errors.hasErrors()){
         var user = userService.createUser(userCreationRequest);
         return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
 
     @PutMapping("/{id}")
