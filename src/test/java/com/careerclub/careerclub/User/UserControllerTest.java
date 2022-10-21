@@ -2,6 +2,8 @@ package com.careerclub.careerclub.User;
 
 
 import com.careerclub.careerclub.Controllers.UserController;
+import com.careerclub.careerclub.Entities.User;
+import com.careerclub.careerclub.Service.CustomUserDetailsService;
 import com.careerclub.careerclub.Service.UserService;
 import com.careerclub.careerclub.Utils.EmailValidator;
 import com.careerclub.careerclub.Utils.UsernameValidator;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,8 +32,8 @@ public class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-
-
+    @MockBean
+    CustomUserDetailsService customUserDetailsService;
     @MockBean
     UserService userService;
 
@@ -45,6 +48,19 @@ public class UserControllerTest {
     public void test_all_users() throws Exception {
         when(userService.getAllUsers()).thenReturn(new ArrayList<>());
         mockMvc.perform(MockMvcRequestBuilders.get("/users")).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Testing get single user by id")
+    public void test_single_user() throws Exception {
+        when(userService.getSingleUserById(1L)).thenReturn(Optional.of(new User()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/1")).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Testing User creation")
+    public void test_user_creation(){
+
     }
 
 }
