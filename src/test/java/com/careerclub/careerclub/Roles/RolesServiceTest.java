@@ -2,6 +2,7 @@ package com.careerclub.careerclub.Roles;
 
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.RolesCreationRequest;
+import com.careerclub.careerclub.DTOs.RolesUpdateRequest;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Repositories.RolesRepository;
 import com.careerclub.careerclub.Service.RolesService;
@@ -18,8 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RolesServiceTest {
@@ -49,6 +49,37 @@ public class RolesServiceTest {
         rolesService.getSingleRoleByName(roleName);
         verify(rolesRepository).findByName(roleName);
     }
+
+    @Test
+    @DisplayName("Testing roll creation")
+    public void test_role_creation(){
+        var roleCreationRequest = new RolesCreationRequest();
+        roleCreationRequest.setName("tenant");
+        when(rolesRepository.save(any(Roles.class))).thenReturn(new Roles());
+        rolesService.createRole(roleCreationRequest);
+        verify(rolesRepository).save(any(Roles.class));
+    }
+
+    @Test
+    @DisplayName("Testing roll update")
+    public void test_role_update(){
+        var roleUpdateRequest = new RolesUpdateRequest();
+        roleUpdateRequest.setName("admin");
+        when(rolesRepository.save(any(Roles.class))).thenReturn(new Roles());
+        rolesService.updateRole(1L,roleUpdateRequest);
+        verify(rolesRepository).save(any(Roles.class));
+    }
+
+
+
+    @Test
+    @DisplayName("Testing roll deletion")
+    public void test_delete_role(){
+        doNothing().when(rolesRepository).deleteById(1L);
+        rolesService.deleteRole(1L);
+        verify(rolesRepository).deleteById(1L);
+    }
+
 
 
 }
