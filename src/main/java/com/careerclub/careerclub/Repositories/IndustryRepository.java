@@ -1,2 +1,12 @@
-package com.careerclub.careerclub.Repositories;public interface IndustryRepository {
+package com.careerclub.careerclub.Repositories;
+
+import com.careerclub.careerclub.Entities.Industry;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface IndustryRepository extends JpaRepository<Industry,Long> {
+    Optional<Industry> findByName(String  name);
 }
