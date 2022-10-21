@@ -4,19 +4,10 @@ import javax.validation.constraints.NotBlank;
 
 public class UserUpdateRequest {
 
-    @NotBlank
-    private String fullName;
     private String phoneNumber;
     private String profession;
     private String bio;
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
 
     public String getPhoneNumber() {
         return phoneNumber;
