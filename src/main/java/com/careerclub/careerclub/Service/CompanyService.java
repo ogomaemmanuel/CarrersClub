@@ -2,6 +2,8 @@ package com.careerclub.careerclub.Service;
 import com.careerclub.careerclub.Entities.Company;
 import com.careerclub.careerclub.DTOs.CompanyCreationRequest;
 import com.careerclub.careerclub.Repositories.CompanyRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +16,8 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public List<Company> getAllCompanies(){
-        var companies = companyRepository.findAll();
+    public Page<Company> getAllCompanies(Pageable pageable){
+        var companies = companyRepository.findAll(pageable);
         return companies;
     }
 
