@@ -6,6 +6,8 @@ import com.careerclub.careerclub.DTOs.UserUpdateRequest;
 import com.careerclub.careerclub.Entities.User;
 import com.careerclub.careerclub.Repositories.UserRepository;
 import com.careerclub.careerclub.Utils.EmailValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,8 +26,8 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public Page<User> getAllUsers(Pageable pageable){
+        return userRepository.findAll(pageable);
     }
 
     public Optional<User> getSingleUserById(Long id){

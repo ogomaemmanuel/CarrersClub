@@ -2,6 +2,7 @@ package com.careerclub.careerclub.Controllers;
 import com.careerclub.careerclub.DTOs.CompanyCreationRequest;
 import com.careerclub.careerclub.Entities.Company;
 import com.careerclub.careerclub.Service.CompanyService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,8 @@ public class CompanyController {
         }
 
         @GetMapping
-        public ResponseEntity <List<Company>> getAllCompanies(){
-            var companies = companyService.getAllCompanies();
+        public ResponseEntity<?> getAllCompanies(Pageable pageable){
+            var companies = companyService.getAllCompanies(pageable);
             return  ResponseEntity.ok(companies);
         }
 
