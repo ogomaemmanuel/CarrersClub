@@ -8,6 +8,7 @@ import com.careerclub.careerclub.Utils.EmailValidator;
 import com.careerclub.careerclub.Utils.ErrorConverter;
 import com.careerclub.careerclub.Utils.UsernameValidator;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
-        var users = userService.getAllUsers();
+    public ResponseEntity<?> getAllUsers(Pageable pageable){
+        var users = userService.getAllUsers(pageable);
         return ResponseEntity.ok(users);
     }
 
