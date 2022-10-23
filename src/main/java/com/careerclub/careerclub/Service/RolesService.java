@@ -35,6 +35,14 @@ public class RolesService {
         throw new RecordNotFoundException("Role with name, "+name+ ",doesn't exist 🚫");
     }
 
+    public Optional<Roles> getRoleById(Long id){
+        var role = rolesRepository.findById(id);
+        if(role.isEmpty()){
+            throw new RecordNotFoundException("Role with id "+id+" doesn't exist.");
+        }
+        return role;
+    }
+
     public Roles createRole(RolesCreationRequest rolesCreationRequest){
         var fetchRole = rolesRepository.findByName(rolesCreationRequest.getName());
         if(fetchRole==null) {
