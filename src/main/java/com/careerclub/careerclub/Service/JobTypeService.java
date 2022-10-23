@@ -24,19 +24,19 @@ public class JobTypeService {
     }
     public JobType createJobType(JobTypeRequest jobTypeRequest){
         JobType jobType = new JobType();
-        if(jobTypeRequest.getName().equals(jobTypeEnums.FULLTIME) || jobTypeRequest.getName().equals(jobTypeEnums.HYBRID) || jobTypeRequest.getName().equals(jobTypeEnums.CONTRACT)){
+        if(jobTypeRequest.getName().equals(jobTypeEnums.FULLTIME)){
             jobType.setName(jobTypeRequest.getName());
             jobTypeRepository.save(jobType);
             return jobType;
         }
         throw new RecordNotFoundException("Job type is invalid");
     }
-//    public enum JobTypeEnums {
-//        FULLTIME,
-//        REMOTE,
-//        HYBRID,
-//        CONTRACT,
-//        INTERNSHIP
-//    }
+    public enum JobTypeEnums {
+        FULLTIME,
+        REMOTE,
+        HYBRID,
+        CONTRACT,
+        INTERNSHIP
+    }
 
 }
