@@ -36,6 +36,12 @@ public class LocationController {
         return ResponseEntity.of(location);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Location> getLocationById(@PathVariable Long id){
+        var location = locationService.getLocationById(id);
+        return ResponseEntity.of(location);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createLocation(@Valid @RequestBody LocationCreateRequest locationCreateRequest, BindingResult errors){
         locationValidator.validate(locationCreateRequest,errors);
