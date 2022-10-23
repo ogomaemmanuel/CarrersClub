@@ -30,6 +30,14 @@ public class LocationService {
         return location;
     }
 
+    public Optional<Location> getLocationById(Long id){
+        var location = locationRepository.findById(id);
+        if(location.isEmpty()){
+            throw new RecordNotFoundException("Location with id "+id+" doesn't exist.");
+        }
+        return location;
+    }
+
     public Location createLocation(LocationCreateRequest locationCreateRequest){
         var location = new Location();
         location.setName(locationCreateRequest.getName());
