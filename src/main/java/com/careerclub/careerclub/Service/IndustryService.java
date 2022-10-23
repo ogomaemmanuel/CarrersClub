@@ -34,6 +34,14 @@ public class IndustryService {
         return industry;
     }
 
+    public Optional<Industry> getIndustryById(Long id){
+        var industry = industryRepository.findById(id);
+        if(industry.isEmpty()){
+            throw new RecordNotFoundException("Industry with id "+id+" doesn't exist.");
+        }
+        return industry;
+    }
+
     public Industry createIndustry(IndustryCreationRequest industryCreationRequest){
         var industry = new Industry();
         industry.setName(industryCreationRequest.getName());
