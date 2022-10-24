@@ -40,6 +40,12 @@ public class RolesController {
         return ResponseEntity.ok(role);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Roles> getRoleById(@PathVariable Long id){
+        var role = rolesService.getRoleById(id);
+        return ResponseEntity.of(role);
+    }
+
     @PostMapping
     public ResponseEntity<?> createRole(@Valid @RequestBody RolesCreationRequest rolesCreationRequest, BindingResult errors){
         roleValidator.validate(rolesCreationRequest,errors);

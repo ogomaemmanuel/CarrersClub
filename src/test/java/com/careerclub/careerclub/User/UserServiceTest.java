@@ -30,14 +30,6 @@ public class UserServiceTest {
 
 
     @Test
-    @DisplayName("Testing all user retrieval")
-    public void test_all_users(){
-        when(userRepository.findAll()).thenReturn(new ArrayList<>());
-        userService.getAllUsers();
-        verify(userRepository).findAll();
-    }
-
-    @Test
     @DisplayName("Testing getting a single user using the user id")
     public void test_single_user(){
         when(userRepository.findById(1L)).thenReturn(Optional.of(new User()));

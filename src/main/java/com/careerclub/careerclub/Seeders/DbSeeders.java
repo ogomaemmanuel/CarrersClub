@@ -18,13 +18,17 @@ public class DbSeeders implements CommandLineRunner {
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
     private final JobTypeRepository jobTypeRepository;
+    private final IndustryRepository industryRepository;
+    private final LocationRepository locationRepository;
 
-    public DbSeeders(UserRepository userRepository, RolesRepository rolesRepository, JobRepository jobRepository, CompanyRepository companyRepository, JobTypeRepository jobTypeRepository) {
+    public DbSeeders(UserRepository userRepository, RolesRepository rolesRepository, JobRepository jobRepository, CompanyRepository companyRepository, IndustryRepository industryRepository, LocationRepository locationRepository) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.jobRepository = jobRepository;
         this.companyRepository = companyRepository;
         this.jobTypeRepository = jobTypeRepository;
+        this.industryRepository = industryRepository;
+        this.locationRepository = locationRepository;
     }
 
     @Override
@@ -34,6 +38,10 @@ public class DbSeeders implements CommandLineRunner {
         var jobCount = jobRepository.count();
         var jobTypeCount = jobRepository.count();
         var companyCount = companyRepository.count();
+        var industryCount = industryRepository.count();
+        var locationCount = locationRepository.count();
+
+
         if(roleCount==0){
             var rolesToAdd = new String[]{"admin", "member","hr"};
             for(String s:rolesToAdd){
@@ -71,10 +79,28 @@ public class DbSeeders implements CommandLineRunner {
             job.setCompany(testCompany);
             jobRepository.save(job);
         }
+
         if(jobTypeCount == 0){
             var jobType = new JobType();
             jobType.setName("FULLTIME");
             jobTypeRepository.save(jobType);
+            }
+            
+        if(industryCount==0){
+            var industries = new String[]{"advertisement", "education", "government", "it", "law", "real estate", "tourism", "retail"};
+            for(String industry: industries){
+                var ids = new Industry();
+                ids.setName(industry);
+                industryRepository.save(ids);
+            }
+        if(locationCount==0){
+            var locations = new String[]{"nairobi","kisumu","mombasa","nakuru","rest of kenya","outside kenya"};
+            for(String lc: locations){
+                var location = new Location();
+                location.setName(lc);
+                locationRepository.save(location);
+            }
+
         }
     }
 }
