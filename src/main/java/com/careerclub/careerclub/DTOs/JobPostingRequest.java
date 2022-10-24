@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.DTOs;
 
+import com.careerclub.careerclub.Entities.JobType;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -10,8 +11,16 @@ public class JobPostingRequest {
     private String title;
     private String qualification;
     private String deadline;
-    private String jobType;
+    private JobType jobTypeId;
     private Long companyId;
+
+    public JobType getJobTypeId() {
+        return jobTypeId;
+    }
+
+    public void setJobTypeId(JobType jobTypeId) {
+        this.jobTypeId = jobTypeId;
+    }
 
     public Long getCompanyId() {
         return companyId;
@@ -53,11 +62,4 @@ public class JobPostingRequest {
         this.deadline = deadline;
     }
 
-    public String getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(String jobType) {
-        this.jobType = jobType;
-    }
 }
