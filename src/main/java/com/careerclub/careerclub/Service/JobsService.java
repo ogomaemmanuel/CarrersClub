@@ -34,7 +34,7 @@ public class JobsService {
         company.ifPresentOrElse(c ->{
             newJob.setDescription(jobPostingRequest.getDescription());
             newJob.setDeadline(jobPostingRequest.getDeadline());
-            newJob.setJobType(jobPostingRequest.getJobType());
+            newJob.setJobType(jobPostingRequest.getJobTypeId());
             newJob.setTitle(jobPostingRequest.getTitle());
             newJob.setQualification(jobPostingRequest.getQualification());
             newJob.setCompany(c);
@@ -53,7 +53,7 @@ public class JobsService {
             job1.setQualification(jobUpdatingRequest.getQualification());
             job1.setDeadline(jobUpdatingRequest.getDeadline());
             job1.setTitle(jobUpdatingRequest.getTitle());
-            job1.setJobType(jobUpdatingRequest.getJobType());
+            job1.setJobType(jobUpdatingRequest.getJobTypeId());
             job1.setDescription(jobUpdatingRequest.getDescription());
             jobRepository.save(job1);
         }, () -> {
