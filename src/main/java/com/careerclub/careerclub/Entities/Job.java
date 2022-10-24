@@ -24,9 +24,32 @@ public class Job {
 
     private Company company;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "jobTypeId")
     private JobType jobType;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "industryId")
+    private Industry industry;
+
+    @ManyToOne
+    @JoinColumn(name = "locationId")
+    private Location location;
+
+    public Industry getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(Industry industry) {
+        this.industry = industry;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public Company getCompany() {
         return company;
