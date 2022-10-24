@@ -1,11 +1,22 @@
 package com.careerclub.careerclub.DTOs;
 
+import com.careerclub.careerclub.Entities.JobType;
+
 public class JobUpdatingRequest {
     private String description;
     private String title;
     private String qualification;
     private String deadline;
-    private String jobType;
+
+    public JobType getJobTypeId() {
+        return jobTypeId;
+    }
+
+    public void setJobTypeId(JobType jobTypeId) {
+        this.jobTypeId = jobTypeId;
+    }
+
+    private JobType jobTypeId;
 
     public String getDescription() {
         return description;
@@ -39,11 +50,4 @@ public class JobUpdatingRequest {
         this.deadline = deadline;
     }
 
-    public String getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(String jobType) {
-        this.jobType = jobType;
-    }
 }
