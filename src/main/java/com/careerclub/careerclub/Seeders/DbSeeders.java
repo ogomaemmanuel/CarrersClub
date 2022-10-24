@@ -12,7 +12,6 @@ import java.util.ArrayList;
 @Transactional
 public class DbSeeders implements CommandLineRunner {
 
-
     private final UserRepository userRepository;
     private final RolesRepository rolesRepository;
     private final JobRepository jobRepository;
@@ -21,7 +20,7 @@ public class DbSeeders implements CommandLineRunner {
     private final IndustryRepository industryRepository;
     private final LocationRepository locationRepository;
 
-    public DbSeeders(UserRepository userRepository, RolesRepository rolesRepository, JobRepository jobRepository, CompanyRepository companyRepository, IndustryRepository industryRepository, LocationRepository locationRepository) {
+    public DbSeeders(UserRepository userRepository, RolesRepository rolesRepository, JobRepository jobRepository, CompanyRepository companyRepository, IndustryRepository industryRepository, LocationRepository locationRepository, JobTypeRepository jobTypeRepository) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.jobRepository = jobRepository;
@@ -86,21 +85,22 @@ public class DbSeeders implements CommandLineRunner {
             jobTypeRepository.save(jobType);
             }
             
-        if(industryCount==0){
+        if(industryCount==0) {
             var industries = new String[]{"advertisement", "education", "government", "it", "law", "real estate", "tourism", "retail"};
-            for(String industry: industries){
+            for (String industry : industries) {
                 var ids = new Industry();
                 ids.setName(industry);
                 industryRepository.save(ids);
             }
-        if(locationCount==0){
-            var locations = new String[]{"nairobi","kisumu","mombasa","nakuru","rest of kenya","outside kenya"};
-            for(String lc: locations){
-                var location = new Location();
-                location.setName(lc);
-                locationRepository.save(location);
-            }
+            if (locationCount == 0) {
+                var locations = new String[]{"nairobi", "kisumu", "mombasa", "nakuru", "rest of kenya", "outside kenya"};
+                for (String lc : locations) {
+                    var location = new Location();
+                    location.setName(lc);
+                    locationRepository.save(location);
+                }
 
+            }
         }
     }
 }
