@@ -16,18 +16,19 @@ public class DbSeeders implements CommandLineRunner {
     private final RolesRepository rolesRepository;
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
-    private final JobTypeRepository jobTypeRepository;
     private final IndustryRepository industryRepository;
     private final LocationRepository locationRepository;
+
+    private final JobTypeRepository jobTypeRepository;
 
     public DbSeeders(UserRepository userRepository, RolesRepository rolesRepository, JobRepository jobRepository, CompanyRepository companyRepository, IndustryRepository industryRepository, LocationRepository locationRepository, JobTypeRepository jobTypeRepository) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.jobRepository = jobRepository;
         this.companyRepository = companyRepository;
-        this.jobTypeRepository = jobTypeRepository;
         this.industryRepository = industryRepository;
         this.locationRepository = locationRepository;
+        this.jobTypeRepository = jobTypeRepository;
     }
 
     @Override
@@ -66,6 +67,11 @@ public class DbSeeders implements CommandLineRunner {
             company.setLink("https://crabs-eugene.netlify.app/");
             companyRepository.save(company);
         }
+        if(jobTypeCount == 0){
+            var jobType = new JobType();
+            jobType.setName("FULLTIME");
+            jobTypeRepository.save(jobType);
+        }
         if(jobCount==0){
             var testCompany = companyRepository.findById(1L).get();
             var testJobType = jobTypeRepository.findById(1L).get();
@@ -79,11 +85,7 @@ public class DbSeeders implements CommandLineRunner {
             jobRepository.save(job);
         }
 
-        if(jobTypeCount == 0){
-            var jobType = new JobType();
-            jobType.setName("FULLTIME");
-            jobTypeRepository.save(jobType);
-            }
+
             
         if(industryCount==0) {
             var industries = new String[]{"advertisement", "education", "government", "it", "law", "real estate", "tourism", "retail"};
@@ -92,15 +94,15 @@ public class DbSeeders implements CommandLineRunner {
                 ids.setName(industry);
                 industryRepository.save(ids);
             }
-            if (locationCount == 0) {
-                var locations = new String[]{"nairobi", "kisumu", "mombasa", "nakuru", "rest of kenya", "outside kenya"};
-                for (String lc : locations) {
-                    var location = new Location();
-                    location.setName(lc);
-                    locationRepository.save(location);
-                }
-
+        }
+        if (locationCount == 0) {
+            var locations = new String[]{"nairobi", "kisumu", "mombasa", "nakuru", "rest of kenya", "outside kenya"};
+            for (String lc : locations) {
+                var location = new Location();
+                location.setName(lc);
+                locationRepository.save(location);
             }
+
         }
     }
 }
