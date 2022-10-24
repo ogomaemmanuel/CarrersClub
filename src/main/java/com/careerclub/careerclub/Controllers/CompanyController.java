@@ -34,6 +34,11 @@ public class CompanyController {
             return  ResponseEntity.ok(company);
         }
 
+    @DeleteMapping("/{id}")
+    public void deleteJob(@PathVariable Long id){
+        companyService.companyToDelete(id);
+    }
+
 //        @PutMapping
 //        public ResponseEntity<Company> updateCompany(){
 //        }

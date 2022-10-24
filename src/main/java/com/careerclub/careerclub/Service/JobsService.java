@@ -4,23 +4,27 @@ import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.JobPostingRequest;
 import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
 import com.careerclub.careerclub.Entities.Job;
-import com.careerclub.careerclub.Repositories.CompanyRepository;
-import com.careerclub.careerclub.Repositories.JobRepository;
+import com.careerclub.careerclub.Repositories.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class JobsService {
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
+    private final JobTypeRepository jobTypeRepository;
+    private final LocationRepository locationRepository;
+    private final IndustryRepository industryRepository;
 
-    public JobsService(JobRepository jobRepository, CompanyRepository companyRepository) {
+    public JobsService(JobRepository jobRepository, CompanyRepository companyRepository, JobTypeRepository jobTypeRepository, LocationRepository locationRepository, IndustryRepository industryRepository) {
         this.jobRepository = jobRepository;
         this.companyRepository = companyRepository;
+        this.jobTypeRepository = jobTypeRepository;
+        this.locationRepository = locationRepository;
+        this.industryRepository = industryRepository;
     }
 
     public Page<Job> getAllJobs(Pageable pageable){
@@ -31,14 +35,21 @@ public class JobsService {
     public Job postJob(JobPostingRequest jobPostingRequest){
         Job newJob = new Job();
         var company = companyRepository.findById(jobPostingRequest.getCompanyId());
+        var jobType = jobTypeRepository.findById(jobPostingRequest.getJobTypeId());
         company.ifPresentOrElse(c ->{
-            newJob.setDescription(jobPostingRequest.getDescription());
-            newJob.setDeadline(jobPostingRequest.getDeadline());
-            newJob.setJobType(jobPostingRequest.getJobTypeId());
-            newJob.setTitle(jobPostingRequest.getTitle());
-            newJob.setQualification(jobPostingRequest.getQualification());
-            newJob.setCompany(c);
-            jobRepository.save(newJob);
+            jobType.ifPresentOrElse(jobType1 -> {
+                newJob.setDescription(jobPostingRequest.getDescription());
+                newJob.setDeadline(jobPostingRequest.getDeadline());
+                newJob.setJobType(jobType1);
+                newJob.setTitle(jobPostingRequest.getTitle());
+                newJob.setQualification(jobPostingRequest.getQualification());
+                newJob.setCompany(c);
+                jobRepository.save(newJob);
+            }, ()->{
+                throw new RecordNotFoundException("Company posting the job doesn't exist");
+
+            });
+
         },() ->{
             throw new RecordNotFoundException("Company posting the job doesn't exist");
         });

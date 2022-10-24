@@ -1,4 +1,5 @@
 package com.careerclub.careerclub.Service;
+import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.Entities.Company;
 import com.careerclub.careerclub.DTOs.CompanyCreationRequest;
 import com.careerclub.careerclub.Repositories.CompanyRepository;
@@ -33,6 +34,16 @@ public class CompanyService {
         company.setLink(newCompany.getLink());
         companyRepository.save(company);
         return company;
+    }
+
+    public String companyToDelete(Long id){
+        var companyToDelete = companyRepository.findById(id);
+        companyToDelete.ifPresentOrElse(job -> {
+            companyRepository.delete(job);
+        }, ()->{
+            throw new RecordNotFoundException("Company doesn't exist");
+        });
+        return "Company deleted successfully";
     }
 
 }
