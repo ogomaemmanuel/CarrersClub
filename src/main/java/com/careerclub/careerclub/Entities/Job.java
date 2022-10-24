@@ -18,12 +18,15 @@ public class Job {
     @CreationTimestamp
     private LocalDateTime datePosted;
     private String deadline;
-    private String jobType;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "companyId")
 
     private Company company;
+
+    @ManyToOne
+    @JoinColumn(name = "jobTypeId")
+    private JobType jobType;
 
     public Company getCompany() {
         return company;
@@ -81,11 +84,11 @@ public class Job {
         this.deadline = deadline;
     }
 
-    public String getJobType() {
+    public JobType getJobType() {
         return jobType;
     }
 
-    public void setJobType(String jobType) {
+    public void setJobType(JobType jobType) {
         this.jobType = jobType;
     }
 }
