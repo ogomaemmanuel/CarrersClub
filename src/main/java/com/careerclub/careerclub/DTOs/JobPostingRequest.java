@@ -11,14 +11,33 @@ public class JobPostingRequest {
     private String title;
     private String qualification;
     private String deadline;
-    private JobType jobTypeId;
+    private Long jobTypeId;
     private Long companyId;
+    private Long locationId;
 
-    public JobType getJobTypeId() {
+    public Long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
+    }
+
+    public Long getIndustryId() {
+        return industryId;
+    }
+
+    public void setIndustryId(Long industryId) {
+        this.industryId = industryId;
+    }
+
+    private Long industryId;
+
+    public Long getJobTypeId() {
         return jobTypeId;
     }
 
-    public void setJobTypeId(JobType jobTypeId) {
+    public void setJobTypeId(Long jobTypeId) {
         this.jobTypeId = jobTypeId;
     }
 
