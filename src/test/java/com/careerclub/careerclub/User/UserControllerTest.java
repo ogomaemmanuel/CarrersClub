@@ -83,7 +83,7 @@ public class UserControllerTest {
     @DisplayName("Testing user update endpoint")
     public void test_user_update() throws Exception{
         var user = new UserUpdateRequest();
-        user.setProfession("Softwate Developer");
+        user.setProfession("Software Developer");
         String usr = objectMapper.writeValueAsString(user);
         mockMvc.perform(MockMvcRequestBuilders.put("/users/update/{id}",1)
                         .content(usr)
