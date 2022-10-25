@@ -45,7 +45,7 @@ public class User implements UserDetails {
         this.createdAt = createdAt;
     }
 
-    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     private List<Roles> roles;
 
