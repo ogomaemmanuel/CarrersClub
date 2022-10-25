@@ -46,7 +46,7 @@ public class UserController {
         return ResponseEntity.of(user);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserCreationRequest userCreationRequest, BindingResult errors){
         usernameValidator.validate(userCreationRequest,errors);
         emailValidator.validate(userCreationRequest,errors);
@@ -57,13 +57,13 @@ public class UserController {
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id,@Valid @RequestBody UserUpdateRequest userUpdateRequest){
         var user = userService.updateUser(id,userUpdateRequest);
         return ResponseEntity.of(user);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<HashMap<Object,Object>> deleteUser(@PathVariable Long id){
         var validate = userService.deleteUser(id);
         return ResponseEntity.ok(validate);
