@@ -30,7 +30,7 @@ public class LocationController {
         return ResponseEntity.ok(locations);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<Location> getLocationByName(@PathVariable String name){
         var location = locationService.getLocationByName(name);
         return ResponseEntity.of(location);
