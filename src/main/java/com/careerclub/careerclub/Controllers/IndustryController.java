@@ -39,7 +39,7 @@ public class IndustryController {
         return ResponseEntity.of(industry);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<Industry> getSingleIndustryByName(@PathVariable String name){
         var industry = industryService.getIndustryByName(name);
         return ResponseEntity.of(industry);
