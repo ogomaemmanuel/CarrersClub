@@ -1,6 +1,7 @@
 package com.careerclub.careerclub.Code;
 
 import com.careerclub.careerclub.Entities.Code;
+import com.careerclub.careerclub.Entities.User;
 import com.careerclub.careerclub.Repositories.CodeAttemptRepository;
 import com.careerclub.careerclub.Repositories.CodeRepository;
 import com.careerclub.careerclub.Repositories.RolesRepository;
@@ -14,7 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,5 +43,6 @@ public class CodeServiceTest {
         codeService.getAllCodes();
         verify(codeRepository).findAll();
     }
+
 
 }

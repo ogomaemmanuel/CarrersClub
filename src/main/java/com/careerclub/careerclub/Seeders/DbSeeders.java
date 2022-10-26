@@ -60,33 +60,6 @@ public class DbSeeders implements CommandLineRunner {
             user.setRoles(roles);
             userRepository.save(user);
         }
-        if(companyCount==0){
-            var company = new Company();
-            company.setName("TestingPLC");
-            company.setDescription("A testing company");
-            company.setLink("https://crabs-eugene.netlify.app/");
-            companyRepository.save(company);
-        }
-        if(jobTypeCount == 0){
-            var jobType = new JobType();
-            jobType.setName("FULLTIME");
-            jobTypeRepository.save(jobType);
-        }
-        if(jobCount==0){
-            var testCompany = companyRepository.findById(1L).get();
-            var testJobType = jobTypeRepository.findById(1L).get();
-            var job = new Job();
-            job.setTitle("DevOps Engineer");
-            job.setDescription("Development and Deploying");
-            job.setJobType(testJobType);
-            job.setDeadline("08/12/2022");
-            job.setQualification("Docker & Kubernettes");
-            job.setCompany(testCompany);
-            jobRepository.save(job);
-        }
-
-
-            
         if(industryCount==0) {
             var industries = new String[]{"advertisement", "education", "government", "it", "law", "real estate", "tourism", "retail"};
             for (String industry : industries) {
@@ -104,5 +77,37 @@ public class DbSeeders implements CommandLineRunner {
             }
 
         }
+        if(companyCount==0){
+            var company = new Company();
+            company.setName("TestingPLC");
+            company.setDescription("A testing company");
+            company.setLink("https://crabs-eugene.netlify.app/");
+            companyRepository.save(company);
+        }
+        if(jobTypeCount == 0){
+            var jobType = new JobType();
+            jobType.setName("FULLTIME");
+            jobTypeRepository.save(jobType);
+        }
+        if(jobCount==0){
+            var testCompany = companyRepository.findById(1L).get();
+            var testJobType = jobTypeRepository.findById(1L).get();
+            var testIndustry = industryRepository.findById(1L).get();
+            var testLocation = locationRepository.findById(1L).get();
+            var job = new Job();
+            job.setTitle("DevOps Engineer");
+            job.setDescription("Development and Deploying");
+            job.setJobType(testJobType);
+            job.setDeadline("08/12/2022");
+            job.setQualification("Docker & Kubernettes");
+            job.setCompany(testCompany);
+            job.setIndustry(testIndustry);
+            job.setLocation(testLocation);
+            jobRepository.save(job);
+        }
+
+
+            
+
     }
 }
