@@ -34,12 +34,12 @@ public class JobsController {
     public ResponseEntity<Job> postNewJob(@RequestBody JobPostingRequest jobPostingRequest){
         return ResponseEntity.ok(jobsService.postJob(jobPostingRequest));
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteJob(@PathVariable Long id){
         jobsService.jobToDelete(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody JobUpdatingRequest jobUpdatingRequest){
         return ResponseEntity.of(jobsService.updateJob(id, jobUpdatingRequest));
     }
