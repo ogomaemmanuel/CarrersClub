@@ -3,6 +3,7 @@ package com.careerclub.careerclub.Service;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.JobPostingRequest;
 import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
+import com.careerclub.careerclub.DTOs.JobsFilter;
 import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Repositories.*;
 import org.springframework.data.domain.Page;
@@ -86,6 +87,10 @@ public class JobsService {
             throw new RecordNotFoundException("Job doesn't exist");
         });
         return "Job deleted successfully";
+    }
+
+    public Page<Job> getAllJobs(JobsFilter jobsFilter, Pageable pageable) {
+        return jobRepository.findAll(jobsFilter.jobExample(),pageable);
     }
 }
 
