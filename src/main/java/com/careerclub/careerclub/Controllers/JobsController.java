@@ -2,6 +2,7 @@ package com.careerclub.careerclub.Controllers;
 
 import com.careerclub.careerclub.DTOs.JobPostingRequest;
 import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
+import com.careerclub.careerclub.DTOs.JobsFilter;
 import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Service.JobsService;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +23,8 @@ public class JobsController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Job>> getAllJobs(Pageable pageable){
-        return  ResponseEntity.ok(jobsService.getAllJobs(pageable));
+    public ResponseEntity<Page<Job>> getAllJobs(JobsFilter jobsFilter, Pageable pageable){
+        return  ResponseEntity.ok(jobsService.getAllJobs(jobsFilter,pageable));
     }
     @GetMapping("/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id){
