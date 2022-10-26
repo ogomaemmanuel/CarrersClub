@@ -24,6 +24,9 @@ public class CompanyService {
 
     public Optional<Company> getCompanyById(Long id){
         var company = companyRepository.findById(id);
+        if(company.isEmpty()){
+            throw new RecordNotFoundException("Company with id "+id+" doesn't exist.");
+        }
         return company;
     }
 
@@ -33,6 +36,23 @@ public class CompanyService {
         company.setDescription(newCompany.getDescription());
         company.setLink(newCompany.getLink());
         companyRepository.save(company);
+        return company;
+    }
+
+    public Optional<Company> updateCompany(Long id,CompanyCreationRequest updateCompany){
+        var company = companyRepository.findById(id);
+        company.ifPresentOrElse(c->{
+            if(updateCompany.getName()!=null){
+                c.setName(updateCompany.getName());
+            }else if(updateCompany.getDescription()!=null){
+                c.setDescription(updateCompany.getDescription());
+            }else if(updateCompany.getLink()!=null){
+                c.setLink(updateCompany.getLink());
+            }
+            companyRepository.save(c);
+        },()->{
+            throw new RecordNotFoundException("Company with id "+id+" doesn't exist.");
+        });
         return company;
     }
 
