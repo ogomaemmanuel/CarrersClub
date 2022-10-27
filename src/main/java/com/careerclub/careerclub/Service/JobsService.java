@@ -42,19 +42,24 @@ public class JobsService {
         Job newJob = new Job();
         var company = companyRepository.findById(jobPostingRequest.getCompanyId());
         var jobType = jobTypeRepository.findById(jobPostingRequest.getJobTypeId());
+        var industry = industryRepository.findById(jobPostingRequest.getIndustryId());
         company.ifPresentOrElse(c ->{
             jobType.ifPresentOrElse(jobType1 -> {
-                newJob.setDescription(jobPostingRequest.getDescription());
-                newJob.setDeadline(jobPostingRequest.getDeadline());
-                newJob.setJobType(jobType1);
-                newJob.setTitle(jobPostingRequest.getTitle());
-                newJob.setQualification(jobPostingRequest.getQualification());
-                newJob.setCompany(c);
-                jobRepository.save(newJob);
-                this.eventPublisher.publishEvent(new JobCreatedEvent(newJob));
+                industry.ifPresentOrElse(i->{
+                    newJob.setDescription(jobPostingRequest.getDescription());
+                    newJob.setDeadline(jobPostingRequest.getDeadline());
+                    newJob.setJobType(jobType1);
+                    newJob.setTitle(jobPostingRequest.getTitle());
+                    newJob.setQualification(jobPostingRequest.getQualification());
+                    newJob.setCompany(c);
+                    newJob.setIndustry(i);
+                    jobRepository.save(newJob);
+                    this.eventPublisher.publishEvent(new JobCreatedEvent(newJob));
+                },()->{
+                    throw new RecordNotFoundException("Given industry doesn't exist.");
+                });
             }, ()->{
-                throw new RecordNotFoundException("Company posting the job doesn't exist");
-
+                throw new RecordNotFoundException("The selected job type doesn't exist");
             });
 
         },() ->{
