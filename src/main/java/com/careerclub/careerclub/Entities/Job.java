@@ -5,6 +5,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="JobPosting")
@@ -38,6 +40,9 @@ public class Job {
     public Industry getIndustry() {
         return industry;
     }
+
+    @Transient
+    public List<Object> events = new ArrayList<>();
 
     public void setIndustry(Industry industry) {
         this.industry = industry;
@@ -114,4 +119,9 @@ public class Job {
     public void setJobType(JobType jobType) {
         this.jobType = jobType;
     }
+
+
+
+
+
 }
