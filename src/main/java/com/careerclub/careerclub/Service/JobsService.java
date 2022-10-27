@@ -5,7 +5,9 @@ import com.careerclub.careerclub.DTOs.JobPostingRequest;
 import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
 import com.careerclub.careerclub.DTOs.JobsFilter;
 import com.careerclub.careerclub.Entities.Job;
+import com.careerclub.careerclub.Events.JobCreatedEvent;
 import com.careerclub.careerclub.Repositories.*;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,13 +16,16 @@ import java.util.Optional;
 
 @Service
 public class JobsService {
+
+    private final ApplicationEventPublisher eventPublisher;
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
     private final JobTypeRepository jobTypeRepository;
     private final LocationRepository locationRepository;
     private final IndustryRepository industryRepository;
 
-    public JobsService(JobRepository jobRepository, CompanyRepository companyRepository, JobTypeRepository jobTypeRepository, LocationRepository locationRepository, IndustryRepository industryRepository) {
+    public JobsService(ApplicationEventPublisher eventPublisher, JobRepository jobRepository, CompanyRepository companyRepository, JobTypeRepository jobTypeRepository, LocationRepository locationRepository, IndustryRepository industryRepository) {
+        this.eventPublisher = eventPublisher;
         this.jobRepository = jobRepository;
         this.companyRepository = companyRepository;
         this.jobTypeRepository = jobTypeRepository;
@@ -46,6 +51,7 @@ public class JobsService {
                 newJob.setQualification(jobPostingRequest.getQualification());
                 newJob.setCompany(c);
                 jobRepository.save(newJob);
+                this.eventPublisher.publishEvent(new JobCreatedEvent(newJob));
             }, ()->{
                 throw new RecordNotFoundException("Company posting the job doesn't exist");
 
