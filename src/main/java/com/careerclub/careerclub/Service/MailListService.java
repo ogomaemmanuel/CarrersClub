@@ -41,7 +41,6 @@ public class MailListService {
         var industry = industryRepository.findByName(mailListSubscribeRequest.getIndustryName());
         var location = locationRepository.findByName(mailListSubscribeRequest.getLocation());
         var user = userRepository.findById(mailListSubscribeRequest.getUserId());
-        var company = companyRepository.findByName(mailListSubscribeRequest.getCompanyName());
         var mailList = new MailList();
         mailList.setAlertName(mailListSubscribeRequest.getAlertName());
         user.ifPresentOrElse(mailList::setUser,()->{
@@ -49,7 +48,6 @@ public class MailListService {
         });
         industry.ifPresent(mailList::setIndustry);
         location.ifPresent(mailList::setLocation);
-        company.ifPresent(mailList::setCompany);
         if(jobType!=null){
             mailList.setJobType(jobType);
         }
