@@ -43,28 +43,25 @@ public class JobsService {
         var company = companyRepository.findById(jobPostingRequest.getCompanyId());
         var jobType = jobTypeRepository.findById(jobPostingRequest.getJobTypeId());
         var industry = industryRepository.findById(jobPostingRequest.getIndustryId());
-        company.ifPresentOrElse(c ->{
-            jobType.ifPresentOrElse(jobType1 -> {
-                industry.ifPresentOrElse(i->{
-                    newJob.setDescription(jobPostingRequest.getDescription());
-                    newJob.setDeadline(jobPostingRequest.getDeadline());
-                    newJob.setJobType(jobType1);
-                    newJob.setTitle(jobPostingRequest.getTitle());
-                    newJob.setQualification(jobPostingRequest.getQualification());
-                    newJob.setCompany(c);
-                    newJob.setIndustry(i);
-                    jobRepository.save(newJob);
-                    this.eventPublisher.publishEvent(new JobCreatedEvent(newJob));
-                },()->{
-                    throw new RecordNotFoundException("Given industry doesn't exist.");
-                });
-            }, ()->{
-                throw new RecordNotFoundException("The selected job type doesn't exist");
-            });
-
-        },() ->{
+        var location  = locationRepository.findById(jobPostingRequest.getLocationId());
+        company.ifPresentOrElse(newJob::setCompany,()->{
             throw new RecordNotFoundException("Company posting the job doesn't exist");
         });
+        jobType.ifPresentOrElse(newJob::setJobType,()->{
+            throw new RecordNotFoundException("The selected job type doesn't exist");
+        });
+        industry.ifPresentOrElse(newJob::setIndustry,()->{
+            throw new RecordNotFoundException("Given industry doesn't exist.");
+        });
+        location.ifPresentOrElse(newJob::setLocation,()->{
+            throw new RecordNotFoundException("The given location doesn't exist.");
+        });
+        newJob.setDescription(jobPostingRequest.getDescription());
+        newJob.setDeadline(jobPostingRequest.getDeadline());
+        newJob.setTitle(jobPostingRequest.getTitle());
+        newJob.setQualification(jobPostingRequest.getQualification());
+        jobRepository.save(newJob);
+        this.eventPublisher.publishEvent(new JobCreatedEvent(newJob));
 
         return newJob;
     }
