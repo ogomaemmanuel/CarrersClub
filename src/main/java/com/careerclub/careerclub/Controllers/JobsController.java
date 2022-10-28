@@ -5,6 +5,7 @@ import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
 import com.careerclub.careerclub.DTOs.JobsFilter;
 import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Service.JobsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Jobs controller")
 @RestController
 @RequestMapping(value = "/jobs")
 public class JobsController {
