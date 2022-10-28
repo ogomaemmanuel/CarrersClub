@@ -3,11 +3,13 @@ package com.careerclub.careerclub.Controllers;
 import com.careerclub.careerclub.DTOs.JobTypeRequest;
 import com.careerclub.careerclub.Entities.JobType;
 import com.careerclub.careerclub.Service.JobTypeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Job Type controller")
 @RestController
 @RequestMapping("/jobtype")
 public class jobTypeController {
