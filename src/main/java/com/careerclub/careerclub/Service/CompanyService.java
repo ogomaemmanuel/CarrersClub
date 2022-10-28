@@ -2,7 +2,9 @@ package com.careerclub.careerclub.Service;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.Entities.Company;
 import com.careerclub.careerclub.DTOs.CompanyCreationRequest;
+import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Repositories.CompanyRepository;
+import com.careerclub.careerclub.Repositories.JobRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,14 +14,20 @@ import java.util.Optional;
 @Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
+    private final JobRepository jobRepository;
 
-    public CompanyService(CompanyRepository companyRepository){
+    public CompanyService(CompanyRepository companyRepository, JobRepository jobRepository){
         this.companyRepository = companyRepository;
+        this.jobRepository = jobRepository;
     }
 
     public Page<Company> getAllCompanies(Pageable pageable){
         var companies = companyRepository.findAll(pageable);
         return companies;
+    }
+
+    public List<Job> getAllJobsOfACompany(Long companyId){
+        return jobRepository.findAllByCompanyId(companyId);
     }
 
     public Optional<Company> getCompanyById(Long id){
