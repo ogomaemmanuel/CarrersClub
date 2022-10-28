@@ -1,9 +1,16 @@
 package com.careerclub.careerclub.DTOs;
 
+import javax.validation.constraints.NotBlank;
+
 public class MailListSubscribeRequest {
     private String alertName;
+
+    @NotBlank(message = "Job Type is required")
     private String jobTypeName;
+    @NotBlank(message = "Industry is required")
     private String industryName;
+
+    @NotBlank(message = "Location is required.")
     private String location;
     private Long userId;
 
