@@ -1,9 +1,11 @@
 package com.careerclub.careerclub.Entities;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import javax.persistence.*;
 
 @Entity
-public class MailList {
+public class MailList extends RepresentationModel<MailList> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
