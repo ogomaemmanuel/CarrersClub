@@ -1,10 +1,11 @@
 package com.careerclub.careerclub.Controllers;
 
 import com.careerclub.careerclub.DTOs.MailListSubscribeRequest;
-import com.careerclub.careerclub.DTOs.MailListUnsubscribeRequest;
 import com.careerclub.careerclub.Entities.MailList;
+import com.careerclub.careerclub.ResourceAssembler.MailListResourceAssembler;
 import com.careerclub.careerclub.Service.MailListService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,33 +14,36 @@ import java.util.List;
 import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Tag(name = "Subscription to mail list controller")
 @RestController
 @RequestMapping("/mail-list")
 public class MailListController {
     private final MailListService mailListService;
+    private final MailListResourceAssembler mailListResourceAssembler;
+    private final PagedResourcesAssembler pagedResourcesAssembler;
 
-    public MailListController(MailListService mailListService) {
+    public MailListController(MailListService mailListService, MailListResourceAssembler mailListResourceAssembler, PagedResourcesAssembler pagedResourcesAssembler) {
         this.mailListService = mailListService;
+        this.mailListResourceAssembler = mailListResourceAssembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @GetMapping
     public ResponseEntity<List<MailList>> getAllSubscription(){
         var lists = mailListService.getAllSubscription();
+
+
         return ResponseEntity.ok(lists);
     }
 
     @PostMapping("/subscribe")
-    public ResponseEntity<MailList> subscribeToList(@Valid @RequestBody MailListSubscribeRequest mailListSubscribeRequest){
+    public ResponseEntity<?> subscribeToList(@Valid @RequestBody MailListSubscribeRequest mailListSubscribeRequest){
         var mailList = mailListService.subscribeToMailList(mailListSubscribeRequest);
+        //Map an unsubscribe link
+        var mailListResource = mailListResourceAssembler.toModel(mailList);
 
-        //Unsubscribe From mail list generation link
-        mailList.add(linkTo(methodOn(MailListController.class).unsubscribeFormList(mailList.getId(),mailList.getUser().getId())).withSelfRel());
-
-
-        return ResponseEntity.ok(mailList);
+        return ResponseEntity.ok(mailListResource);
     }
 
     @PutMapping("/unsubscribe/{id}/{userId}")
