@@ -17,15 +17,14 @@ import java.util.Optional;
 @Service
 public class JobsService {
 
-    private final ApplicationEventPublisher eventPublisher;
+
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
     private final JobTypeRepository jobTypeRepository;
     private final LocationRepository locationRepository;
     private final IndustryRepository industryRepository;
 
-    public JobsService(ApplicationEventPublisher eventPublisher, JobRepository jobRepository, CompanyRepository companyRepository, JobTypeRepository jobTypeRepository, LocationRepository locationRepository, IndustryRepository industryRepository) {
-        this.eventPublisher = eventPublisher;
+    public JobsService(JobRepository jobRepository, CompanyRepository companyRepository, JobTypeRepository jobTypeRepository, LocationRepository locationRepository, IndustryRepository industryRepository) {
         this.jobRepository = jobRepository;
         this.companyRepository = companyRepository;
         this.jobTypeRepository = jobTypeRepository;
@@ -60,9 +59,8 @@ public class JobsService {
         newJob.setDeadline(jobPostingRequest.getDeadline());
         newJob.setTitle(jobPostingRequest.getTitle());
         newJob.setQualification(jobPostingRequest.getQualification());
+        newJob.registerCreateEvent();
         jobRepository.save(newJob);
-        this.eventPublisher.publishEvent(new JobCreatedEvent(newJob));
-
         return newJob;
     }
 
@@ -89,9 +87,7 @@ public class JobsService {
 
     public String jobToDelete(Long id){
         var jobToBeDeleted = jobRepository.findById(id);
-        jobToBeDeleted.ifPresentOrElse(job -> {
-            jobRepository.delete(job);
-        }, ()->{
+        jobToBeDeleted.ifPresentOrElse(jobRepository::delete, ()->{
             throw new RecordNotFoundException("Job doesn't exist");
         });
         return "Job deleted successfully";
