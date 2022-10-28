@@ -12,6 +12,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Tag(name = "Subscription to mail list controller")
 @RestController
 @RequestMapping("/mail-list")
@@ -31,12 +34,17 @@ public class MailListController {
     @PostMapping("/subscribe")
     public ResponseEntity<MailList> subscribeToList(@Valid @RequestBody MailListSubscribeRequest mailListSubscribeRequest){
         var mailList = mailListService.subscribeToMailList(mailListSubscribeRequest);
+
+        //Unsubscribe From mail list generation link
+        mailList.add(linkTo(methodOn(MailListController.class).unsubscribeFormList(mailList.getId(),mailList.getUser().getId())).withSelfRel());
+
+
         return ResponseEntity.ok(mailList);
     }
 
-    @PostMapping("/unsubscribe")
-    public ResponseEntity<Map<Object,Object>> unsubscribeFormList(@Valid @RequestBody MailListUnsubscribeRequest mailListUnsubscribeRequest){
-        var message = mailListService.unsubscribeFromTheMailingList(mailListUnsubscribeRequest);
+    @PutMapping("/unsubscribe/{id}/{userId}")
+    public ResponseEntity<Map<Object,Object>> unsubscribeFormList(@PathVariable Long id,@PathVariable Long userId){
+        var message = mailListService.unsubscribeFromTheMailingList(id,userId);
         return ResponseEntity.ok(message);
     }
 
