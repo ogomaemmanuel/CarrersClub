@@ -39,13 +39,14 @@ public class MailListService {
 
     public MailList subscribeToMailList(MailListSubscribeRequest mailListSubscribeRequest){
         //User Making request
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userRepository.findByUsername(userDetails.getUsername());
+//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        var user = userRepository.findByUsername(userDetails.getUsername());
 
         //Fetching
         var jobType = jobTypeRepository.getByname(mailListSubscribeRequest.getJobTypeName());
         var industry = industryRepository.findByName(mailListSubscribeRequest.getIndustryName());
         var location = locationRepository.findByName(mailListSubscribeRequest.getLocation());
+        var user = userRepository.findById(mailListSubscribeRequest.getUserId());
 
         var mailList = new MailList();
         mailList.setAlertName(mailListSubscribeRequest.getAlertName());
