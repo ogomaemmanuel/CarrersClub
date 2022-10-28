@@ -4,6 +4,7 @@ import com.careerclub.careerclub.DTOs.MailListSubscribeRequest;
 import com.careerclub.careerclub.DTOs.MailListUnsubscribeRequest;
 import com.careerclub.careerclub.Entities.MailList;
 import com.careerclub.careerclub.Service.MailListService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
+@Tag(name = "Subscription to mail list controller")
 @RestController
 @RequestMapping("/mail-list")
 public class MailListController {
