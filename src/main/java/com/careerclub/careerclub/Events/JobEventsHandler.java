@@ -29,11 +29,11 @@ public class JobEventsHandler {
         this.emailServiceImplement = emailServiceImplement;
     }
 
-    public void configureAnEmail(MailList mailList, String msg) {
+    public void configureAnEmail(MailList mailList, String subject,String message) {
         var emailDetails = new EmailDetails();
-        emailDetails.setSubject("Job alerts");
+        emailDetails.setSubject(subject);
         emailDetails.setRecipient(mailList.getUser().getEmail());
-        emailDetails.setMsgBody(msg);
+        emailDetails.setMsgBody(message);
         emailServiceImplement.sendSimpleMail(emailDetails);
     }
 
@@ -58,8 +58,9 @@ public class JobEventsHandler {
 
 
         for (MailList subscriber : mailListSubscribers) {
-            String msg = "New job listed from your alert "+subscriber.getAlertName();
-            configureAnEmail(subscriber, msg);
+            String subject = "Job Alert: "+subscriber.getAlertName();
+            String message = "Job Industry "+subscriber.getIndustry().getName()+", job location "+subscriber.getLocation().getName()+" and job type "+subscriber.getJobType().getName();
+            configureAnEmail(subscriber, subject, message);
         }
 
 
