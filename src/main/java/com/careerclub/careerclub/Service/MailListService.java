@@ -62,9 +62,9 @@ public class MailListService {
 
     }
 
-    public Map<Object,Object> unsubscribeFromTheMailingList(MailListUnsubscribeRequest mailListUnsubscribeRequest){
+    public Map<Object,Object> unsubscribeFromTheMailingList(Long id, Long userId){
         var validate = new HashMap<>();
-        var mail = mailListRepository.findByIdAndUserId(mailListUnsubscribeRequest.getId(), mailListUnsubscribeRequest.getUserId());
+        var mail = mailListRepository.findByIdAndUserId(id, userId);
         mail.ifPresentOrElse(m->{
             mailListRepository.delete(m);
             validate.put("message","Unsubscribed successfully.");

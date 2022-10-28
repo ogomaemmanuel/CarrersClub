@@ -2,10 +2,11 @@ package com.careerclub.careerclub.Entities;
 
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 @Entity
-public class Company {
+public class Company extends RepresentationModel<Company>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
