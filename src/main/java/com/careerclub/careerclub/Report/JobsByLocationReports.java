@@ -1,2 +1,6 @@
-package com.careerclub.careerclub.Report;public class JobsByLocationReports {
+package com.careerclub.careerclub.Report;
+
+public interface JobsByLocationReports {
+    String getLocation();
+    Long getTotalJobs();
 }

@@ -6,6 +6,8 @@ import com.careerclub.careerclub.DTOs.MailListSubscribeRequest;
 import com.careerclub.careerclub.DTOs.MailListUnsubscribeRequest;
 import com.careerclub.careerclub.Entities.MailList;
 import com.careerclub.careerclub.Repositories.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -36,11 +38,15 @@ public class MailListService {
     }
 
     public MailList subscribeToMailList(MailListSubscribeRequest mailListSubscribeRequest){
+        //User Making request
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = userRepository.findByUsername(userDetails.getUsername());
+
         //Fetching
         var jobType = jobTypeRepository.getByname(mailListSubscribeRequest.getJobTypeName());
         var industry = industryRepository.findByName(mailListSubscribeRequest.getIndustryName());
         var location = locationRepository.findByName(mailListSubscribeRequest.getLocation());
-        var user = userRepository.findById(mailListSubscribeRequest.getUserId());
+
         var mailList = new MailList();
         mailList.setAlertName(mailListSubscribeRequest.getAlertName());
         user.ifPresentOrElse(mailList::setUser,()->{
