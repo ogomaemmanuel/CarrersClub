@@ -6,6 +6,7 @@ import com.careerclub.careerclub.DTOs.ApplicationRequest;
 import com.careerclub.careerclub.DTOs.CvDownloadRequest;
 import com.careerclub.careerclub.Entities.Application;
 import com.careerclub.careerclub.Service.ApplicationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 
+@Tag(name = "Applications controller")
 @RestController
 @RequestMapping("/applications")
 public class ApplicationsController {
