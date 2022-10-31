@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 @Service
 public class CompanyService {
@@ -66,8 +65,10 @@ public class CompanyService {
 
     public String companyToDelete(Long id){
         var companyToDelete = companyRepository.findById(id);
-        companyToDelete.ifPresentOrElse(job -> {
-            companyRepository.delete(job);
+        companyToDelete.ifPresentOrElse(company -> {
+            var jobs = jobRepository.findAllByCompanyId(company.getId());
+            jobRepository.deleteAll(jobs);
+            companyRepository.delete(company);
         }, ()->{
             throw new RecordNotFoundException("Company doesn't exist");
         });
