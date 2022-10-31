@@ -6,15 +6,13 @@ import com.careerclub.careerclub.Config.WebSecurityConfig;
 import com.careerclub.careerclub.Entities.Code;
 import com.careerclub.careerclub.Repositories.CodeRepository;
 import com.careerclub.careerclub.Repositories.UserRepository;
+import com.careerclub.careerclub.Utils.EmailDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.careerclub.careerclub.Utils.EmailValidator.validate;
 import static com.careerclub.careerclub.Utils.JwtGenerateToken.generateAccessToken;
@@ -28,9 +26,12 @@ public class AuthService {
     private final UserRepository userRepository;
     private final CodeRepository codeRepository;
 
-    public AuthService(UserRepository userRepository, CodeRepository codeRepository) {
+    private final EmailServiceImplement emailServiceImplement;
+
+    public AuthService(UserRepository userRepository, CodeRepository codeRepository, EmailServiceImplement emailServiceImplement) {
         this.userRepository = userRepository;
         this.codeRepository = codeRepository;
+        this.emailServiceImplement = emailServiceImplement;
     }
     public String login(LoginRequest loginRequest){
         //Email Validation
@@ -51,6 +52,13 @@ public class AuthService {
                     newCode.setCode(code);
                     newCode.setUser(user);
                     codeRepository.save(newCode);
+
+                    //Code send via email
+                    var emailDetails = new EmailDetails();
+                    emailDetails.setMsgBody(newCode.getCode());
+                    emailDetails.setRecipient(user.getEmail());
+                    emailDetails.setSubject("Career Club Security verification code.");
+                    emailServiceImplement.sendSimpleMail(emailDetails);
 
                     //Assign Otp role
                     rolesClaim.put("roles", "otp");

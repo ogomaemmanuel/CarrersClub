@@ -1,12 +1,15 @@
 package com.careerclub.careerclub.Repositories;
 
 import com.careerclub.careerclub.Entities.Job;
+import com.careerclub.careerclub.Report.JobsByLocationReports;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
-    List<Job> findAllByCompanyId(Long id);
+
+    public List<Job> findAllByCompanyId(Long companyId);
 }

@@ -34,7 +34,7 @@ public class RolesController {
         return ResponseEntity.ok(roles);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<Roles> getSingleRoleByName(@PathVariable String name){
         var role = rolesService.getSingleRoleByName(name);
         return ResponseEntity.ok(role);
@@ -46,7 +46,7 @@ public class RolesController {
         return ResponseEntity.of(role);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createRole(@Valid @RequestBody RolesCreationRequest rolesCreationRequest, BindingResult errors){
         roleValidator.validate(rolesCreationRequest,errors);
         if(!errors.hasErrors()){
@@ -56,13 +56,13 @@ public class RolesController {
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Roles> updateRole(@PathVariable Long id, @Valid @RequestBody RolesUpdateRequest rolesUpdateRequest){
         var role = rolesService.updateRole(id,rolesUpdateRequest);
         return ResponseEntity.of(role);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<HashMap<Object,Object>> deleteRole(@PathVariable Long id){
         var validate = rolesService.deleteRole(id);
         return ResponseEntity.ok(validate);

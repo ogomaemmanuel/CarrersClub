@@ -3,6 +3,7 @@ package com.careerclub.careerclub.Controllers;
 import com.careerclub.careerclub.DTOs.UserCreationRequest;
 import com.careerclub.careerclub.DTOs.UserUpdateRequest;
 import com.careerclub.careerclub.Entities.User;
+import com.careerclub.careerclub.ResourceAssembler.UserResourceAssembler;
 import com.careerclub.careerclub.Service.UserService;
 import com.careerclub.careerclub.Utils.EmailValidator;
 import com.careerclub.careerclub.Utils.ErrorConverter;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 
 @Tag(name = "Users Controller")
 @RestController
@@ -26,12 +26,14 @@ public class UserController {
 
     private final UsernameValidator usernameValidator;
     private final EmailValidator emailValidator;
+    private final UserResourceAssembler userResourceAssembler;
 
 
-    public UserController(UserService userService, UsernameValidator usernameValidator, EmailValidator emailValidator) {
+    public UserController(UserService userService, UsernameValidator usernameValidator, EmailValidator emailValidator, UserResourceAssembler userResourceAssembler) {
         this.userService = userService;
         this.usernameValidator = usernameValidator;
         this.emailValidator = emailValidator;
+        this.userResourceAssembler = userResourceAssembler;
     }
 
     @GetMapping
@@ -46,24 +48,25 @@ public class UserController {
         return ResponseEntity.of(user);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserCreationRequest userCreationRequest, BindingResult errors){
         usernameValidator.validate(userCreationRequest,errors);
         emailValidator.validate(userCreationRequest,errors);
         if(!errors.hasErrors()){
         var user = userService.createUser(userCreationRequest);
-        return ResponseEntity.ok(user);
+        var userWithLinks = userResourceAssembler.toModel(user);
+        return ResponseEntity.ok(userWithLinks);
         }
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id,@Valid @RequestBody UserUpdateRequest userUpdateRequest){
         var user = userService.updateUser(id,userUpdateRequest);
         return ResponseEntity.of(user);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<HashMap<Object,Object>> deleteUser(@PathVariable Long id){
         var validate = userService.deleteUser(id);
         return ResponseEntity.ok(validate);

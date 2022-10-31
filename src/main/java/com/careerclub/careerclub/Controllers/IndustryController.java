@@ -6,6 +6,7 @@ import com.careerclub.careerclub.Entities.Industry;
 import com.careerclub.careerclub.Service.IndustryService;
 import com.careerclub.careerclub.Utils.ErrorConverter;
 import com.careerclub.careerclub.Utils.IndustryValidator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
-
+@Tag(name = "Industry controller")
 @RestController
 @RequestMapping("industries")
 public class IndustryController {
@@ -39,7 +40,7 @@ public class IndustryController {
         return ResponseEntity.of(industry);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<Industry> getSingleIndustryByName(@PathVariable String name){
         var industry = industryService.getIndustryByName(name);
         return ResponseEntity.of(industry);

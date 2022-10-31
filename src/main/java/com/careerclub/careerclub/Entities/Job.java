@@ -1,14 +1,21 @@
 package com.careerclub.careerclub.Entities;
 
+import com.careerclub.careerclub.Events.JobCreatedEvent;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
+import org.springframework.data.domain.AfterDomainEventPublication;
+import org.springframework.data.domain.DomainEvents;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="JobPosting")
-public class Job {
+public class Job extends AbstractAggregateRoot<Job> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,6 +45,8 @@ public class Job {
     public Industry getIndustry() {
         return industry;
     }
+
+
 
     public void setIndustry(Industry industry) {
         this.industry = industry;
@@ -114,4 +123,12 @@ public class Job {
     public void setJobType(JobType jobType) {
         this.jobType = jobType;
     }
+
+public void registerCreateEvent(){
+        this.registerEvent(new JobCreatedEvent(this));
+}
+
+
+
+
 }

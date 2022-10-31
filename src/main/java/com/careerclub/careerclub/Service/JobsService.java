@@ -3,8 +3,11 @@ package com.careerclub.careerclub.Service;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.JobPostingRequest;
 import com.careerclub.careerclub.DTOs.JobUpdatingRequest;
+import com.careerclub.careerclub.DTOs.JobsFilter;
 import com.careerclub.careerclub.Entities.Job;
+import com.careerclub.careerclub.Events.JobCreatedEvent;
 import com.careerclub.careerclub.Repositories.*;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,8 @@ import java.util.Optional;
 
 @Service
 public class JobsService {
+
+
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
     private final JobTypeRepository jobTypeRepository;
@@ -36,24 +41,26 @@ public class JobsService {
         Job newJob = new Job();
         var company = companyRepository.findById(jobPostingRequest.getCompanyId());
         var jobType = jobTypeRepository.findById(jobPostingRequest.getJobTypeId());
-        company.ifPresentOrElse(c ->{
-            jobType.ifPresentOrElse(jobType1 -> {
-                newJob.setDescription(jobPostingRequest.getDescription());
-                newJob.setDeadline(jobPostingRequest.getDeadline());
-                newJob.setJobType(jobType1);
-                newJob.setTitle(jobPostingRequest.getTitle());
-                newJob.setQualification(jobPostingRequest.getQualification());
-                newJob.setCompany(c);
-                jobRepository.save(newJob);
-            }, ()->{
-                throw new RecordNotFoundException("Company posting the job doesn't exist");
-
-            });
-
-        },() ->{
+        var industry = industryRepository.findById(jobPostingRequest.getIndustryId());
+        var location  = locationRepository.findById(jobPostingRequest.getLocationId());
+        company.ifPresentOrElse(newJob::setCompany,()->{
             throw new RecordNotFoundException("Company posting the job doesn't exist");
         });
-
+        jobType.ifPresentOrElse(newJob::setJobType,()->{
+            throw new RecordNotFoundException("The selected job type doesn't exist");
+        });
+        industry.ifPresentOrElse(newJob::setIndustry,()->{
+            throw new RecordNotFoundException("Given industry doesn't exist.");
+        });
+        location.ifPresentOrElse(newJob::setLocation,()->{
+            throw new RecordNotFoundException("The given location doesn't exist.");
+        });
+        newJob.setDescription(jobPostingRequest.getDescription());
+        newJob.setDeadline(jobPostingRequest.getDeadline());
+        newJob.setTitle(jobPostingRequest.getTitle());
+        newJob.setQualification(jobPostingRequest.getQualification());
+        newJob.registerCreateEvent();
+        jobRepository.save(newJob);
         return newJob;
     }
 
@@ -80,12 +87,14 @@ public class JobsService {
 
     public String jobToDelete(Long id){
         var jobToBeDeleted = jobRepository.findById(id);
-        jobToBeDeleted.ifPresentOrElse(job -> {
-            jobRepository.delete(job);
-        }, ()->{
+        jobToBeDeleted.ifPresentOrElse(jobRepository::delete, ()->{
             throw new RecordNotFoundException("Job doesn't exist");
         });
         return "Job deleted successfully";
+    }
+
+    public Page<Job> getAllJobs(JobsFilter jobsFilter, Pageable pageable) {
+        return jobRepository.findAll(jobsFilter.jobExample(),pageable);
     }
 }
 

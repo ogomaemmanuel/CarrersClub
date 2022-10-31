@@ -5,6 +5,7 @@ import com.careerclub.careerclub.Entities.Location;
 import com.careerclub.careerclub.Service.LocationService;
 import com.careerclub.careerclub.Utils.ErrorConverter;
 import com.careerclub.careerclub.Utils.LocationValidator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
+@Tag(name = "Location controller")
 @RestController
 @RequestMapping("locations")
 public class LocationController {
@@ -30,7 +32,7 @@ public class LocationController {
         return ResponseEntity.ok(locations);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<Location> getLocationByName(@PathVariable String name){
         var location = locationService.getLocationByName(name);
         return ResponseEntity.of(location);

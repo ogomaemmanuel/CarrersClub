@@ -3,12 +3,14 @@ package com.careerclub.careerclub.Controllers;
 import com.careerclub.careerclub.DTOs.CodeVerificationRequest;
 import com.careerclub.careerclub.Entities.Code;
 import com.careerclub.careerclub.Service.CodeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@Tag(name = "Code controller")
 @RestController
 @RequestMapping("/code")
 public class CodeController {
