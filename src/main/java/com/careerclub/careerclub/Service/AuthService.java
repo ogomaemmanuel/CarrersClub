@@ -38,7 +38,7 @@ public class AuthService {
         //Email Validation
         var emailIsValidate = validate(loginRequest.getEmail());
         if(emailIsValidate) {
-            var user = userRepository.findByEmail(loginRequest.getEmail());
+            var user = userRepository.findByEmail(loginRequest.getEmail()).get();
             if (user != null) {
                 var rolesClaim = new HashMap<String, Object>();
                 if (WebSecurityConfig.passwordEncoder().matches(loginRequest.getPassword(), user.getPassword())) {
