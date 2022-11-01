@@ -53,7 +53,7 @@ public class DbSeeders implements CommandLineRunner {
         }
         if(userCount==0){
             var roles = new ArrayList<Roles>();
-            var adminRole = rolesRepository.findByName("admin");
+            var adminRole = rolesRepository.findByName("admin").get();
             roles.add(adminRole);
             var user = new User();
             user.setUsername("Testing");

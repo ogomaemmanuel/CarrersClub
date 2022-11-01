@@ -1,4 +1,5 @@
 package com.careerclub.careerclub.Service;
+import com.careerclub.careerclub.Advice.BadRequestException;
 import com.careerclub.careerclub.Advice.DuplicateException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.Entities.Company;
@@ -12,6 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.compile;
+
 @Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
@@ -48,6 +53,20 @@ public class CompanyService {
         if(companyName.isPresent()){
             throw new DuplicateException("Company with the given name already exists.");
         }
+        //Url validation
+        String regex = "((http|https)://)(www.)?"
+                + "[a-zA-Z0-9@:%._\\+~#?&//=]"
+                + "{2,256}\\.[a-z]"
+                + "{2,6}\\b([-a-zA-Z0-9@:%"
+                + "._\\+~#?&//=]*)";
+
+        Pattern p = compile(regex);
+        var link = newCompany.getLink();
+
+        if(!p.matcher(link).matches()){
+            throw new BadRequestException("The given url isn't valid.");
+        }
+
         var company = new Company();
         company.setName(newCompany.getName());
         company.setDescription(newCompany.getDescription());
