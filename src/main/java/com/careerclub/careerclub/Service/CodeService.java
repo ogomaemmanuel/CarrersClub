@@ -51,7 +51,7 @@ public class CodeService {
 
     public HashMap<Object, Object> verifyCode(CodeVerificationRequest codeVerificationRequest){
         var username = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userRepository.findByUsername(username.toString());
+        var user = userRepository.findByUsername(username.toString()).get();
         var usernameCode = codeRepository.findByUser(user);
         var previousAttempts= codeAttemptRepository.countCodeAttemptByUserOrderByCreatedAt(user.getId(), LocalDateTime.now().minusMinutes(5));
         if(previousAttempts==null || previousAttempts <= 5){
@@ -59,7 +59,7 @@ public class CodeService {
                 var validate = new HashMap<>();
 
                 //Add member role to user
-                var memberRole = rolesRepository.findByName("member");
+                var memberRole = rolesRepository.findByName("member").get();
                 user.addRole(memberRole);
                 userRepository.save(user);
 
