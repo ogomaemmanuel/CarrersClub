@@ -28,6 +28,10 @@ public class CompanyService {
     }
 
     public List<Job> getAllJobsOfACompany(Long companyId){
+        var company = companyRepository.findById(companyId);
+        if(company.isEmpty()){
+            throw new RecordNotFoundException("Company with the given id doesn't exist");
+        }
         return jobRepository.findAllByCompanyId(companyId);
     }
 
@@ -54,6 +58,10 @@ public class CompanyService {
 
     public Optional<Company> updateCompany(Long id,CompanyCreationRequest updateCompany){
         var company = companyRepository.findById(id);
+        var companyName = companyRepository.findByName(updateCompany.getName());
+        if(companyName.isPresent()){
+            throw new DuplicateException("Company with the given name already exists");
+        }
         company.ifPresentOrElse(c->{
             if(updateCompany.getName()!=null){
                 c.setName(updateCompany.getName());
