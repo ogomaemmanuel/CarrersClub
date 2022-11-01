@@ -41,13 +41,9 @@ public class RolesController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createRole(@Valid @RequestBody RolesCreationRequest rolesCreationRequest, BindingResult errors){
-        roleValidator.validate(rolesCreationRequest,errors);
-        if(!errors.hasErrors()){
-            var role = rolesService.createRole(rolesCreationRequest);
-            return ResponseEntity.status(201).body(role);
-        }
-        return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
+    public ResponseEntity<?> createRole(@Valid @RequestBody RolesCreationRequest rolesCreationRequest){
+        var role = rolesService.createRole(rolesCreationRequest);
+        return ResponseEntity.status(201).body(role);
     }
 
     @PutMapping("/update/{id}")
