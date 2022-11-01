@@ -7,11 +7,13 @@ import com.careerclub.careerclub.DTOs.JobsFilter;
 import com.careerclub.careerclub.Entities.Job;
 import com.careerclub.careerclub.Events.JobCreatedEvent;
 import com.careerclub.careerclub.Repositories.*;
+import com.careerclub.careerclub.Utils.Dateformat;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Optional;
 
 @Service
@@ -37,7 +39,7 @@ public class JobsService {
         return jobs;
     }
 
-    public Job postJob(JobPostingRequest jobPostingRequest){
+    public Job postJob(JobPostingRequest jobPostingRequest) throws ParseException {
         Job newJob = new Job();
         var company = companyRepository.findById(jobPostingRequest.getCompanyId());
         var jobType = jobTypeRepository.findById(jobPostingRequest.getJobTypeId());
@@ -56,20 +58,21 @@ public class JobsService {
             throw new RecordNotFoundException("The given location doesn't exist.");
         });
         newJob.setDescription(jobPostingRequest.getDescription());
-        newJob.setDeadline(jobPostingRequest.getDeadline());
+        newJob.setDeadline(Dateformat.formatDate(jobPostingRequest.getDeadline()));
         newJob.setTitle(jobPostingRequest.getTitle());
         newJob.setQualification(jobPostingRequest.getQualification());
         newJob.registerCreateEvent();
+        System.out.println(newJob);
         jobRepository.save(newJob);
         return newJob;
     }
 
-    public Optional<Job> updateJob(Long id, JobUpdatingRequest jobUpdatingRequest) {
+    public Optional<Job> updateJob(Long id, JobUpdatingRequest jobUpdatingRequest) throws ParseException {
         var jobToUpdate = jobRepository.findById(id);
 
         jobToUpdate.ifPresentOrElse(job1 -> {
             job1.setQualification(jobUpdatingRequest.getQualification());
-            job1.setDeadline(jobUpdatingRequest.getDeadline());
+            job1.setDeadline(Dateformat.formatDate(jobUpdatingRequest.getDeadline()));
             job1.setTitle(jobUpdatingRequest.getTitle());
             job1.setJobType(jobUpdatingRequest.getJobTypeId());
             job1.setDescription(jobUpdatingRequest.getDescription());

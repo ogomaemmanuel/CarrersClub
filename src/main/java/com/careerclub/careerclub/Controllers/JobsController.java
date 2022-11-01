@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @Tag(name = "Jobs controller")
 @RestController
 @RequestMapping(value = "/jobs")
@@ -34,7 +36,7 @@ public class JobsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postNewJob(@RequestBody JobPostingRequest jobPostingRequest){
+    public ResponseEntity<?> postNewJob(@RequestBody JobPostingRequest jobPostingRequest) throws ParseException {
         var job = jobsService.postJob(jobPostingRequest);
 
         //Add a get link
@@ -48,7 +50,7 @@ public class JobsController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody JobUpdatingRequest jobUpdatingRequest){
+    public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody JobUpdatingRequest jobUpdatingRequest) throws ParseException{
         return ResponseEntity.of(jobsService.updateJob(id, jobUpdatingRequest));
     }
 

@@ -6,11 +6,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,7 +26,8 @@ public class Job extends AbstractAggregateRoot<Job> {
     private String qualification;
     @CreationTimestamp
     private LocalDateTime datePosted;
-    private String deadline;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date deadline;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "companyId")
@@ -46,7 +49,13 @@ public class Job extends AbstractAggregateRoot<Job> {
         return industry;
     }
 
+    public Date getDeadline() {
+        return deadline;
+    }
 
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
 
     public void setIndustry(Industry industry) {
         this.industry = industry;
@@ -108,13 +117,6 @@ public class Job extends AbstractAggregateRoot<Job> {
         this.datePosted = datePosted;
     }
 
-    public String getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(String deadline) {
-        this.deadline = deadline;
-    }
 
     public JobType getJobType() {
         return jobType;
