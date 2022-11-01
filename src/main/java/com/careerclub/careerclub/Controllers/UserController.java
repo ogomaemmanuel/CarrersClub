@@ -49,15 +49,12 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserCreationRequest userCreationRequest, BindingResult errors){
-        usernameValidator.validate(userCreationRequest,errors);
-        emailValidator.validate(userCreationRequest,errors);
-        if(!errors.hasErrors()){
-        var user = userService.createUser(userCreationRequest);
-        var userWithLinks = userResourceAssembler.toModel(user);
-        return ResponseEntity.status(201).body("Account created successfully");
-        }
-        return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserCreationRequest userCreationRequest){
+            var validate = new HashMap<>();
+            validate.put("message","Account created successfully.");
+            var user = userService.createUser(userCreationRequest);
+            var userWithLinks = userResourceAssembler.toModel(user);
+            return ResponseEntity.status(201).body(userWithLinks);
     }
 
     @PutMapping("/update/{id}")
