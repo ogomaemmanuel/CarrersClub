@@ -62,25 +62,30 @@ public class JobsService {
         newJob.setTitle(jobPostingRequest.getTitle());
         newJob.setQualification(jobPostingRequest.getQualification());
         newJob.registerCreateEvent();
-        System.out.println(newJob);
         jobRepository.save(newJob);
         return newJob;
     }
 
     public Optional<Job> updateJob(Long id, JobUpdatingRequest jobUpdatingRequest) throws ParseException {
-        var jobToUpdate = jobRepository.findById(id);
-
-        jobToUpdate.ifPresentOrElse(job1 -> {
-            job1.setQualification(jobUpdatingRequest.getQualification());
-            job1.setDeadline(Dateformat.formatDate(jobUpdatingRequest.getDeadline()));
-            job1.setTitle(jobUpdatingRequest.getTitle());
-            job1.setJobType(jobUpdatingRequest.getJobTypeId());
-            job1.setDescription(jobUpdatingRequest.getDescription());
-            jobRepository.save(job1);
-        }, () -> {
-            throw new RecordNotFoundException("Job doesn't Exist");
+        var jobToUpdate = jobRepository.findById(id).get();
+        var jobType = jobTypeRepository.findById(jobUpdatingRequest.getJobTypeId());
+        jobType.ifPresentOrElse(j->{
+            jobToUpdate.setJobType(j);
+        },()->{
+            throw new RecordNotFoundException("The given job type doesn't exist.");
         });
-        return jobToUpdate;
+        if(jobToUpdate==null){
+            throw new RecordNotFoundException("Job doesn't Exist");
+        }
+
+
+        jobToUpdate.setQualification(jobUpdatingRequest.getQualification());
+        jobToUpdate.setDeadline(Dateformat.formatDate(jobUpdatingRequest.getDeadline()));
+        jobToUpdate.setTitle(jobUpdatingRequest.getTitle());
+        jobToUpdate.setDescription(jobUpdatingRequest.getDescription());
+        jobRepository.save(jobToUpdate);
+
+        return Optional.of(jobToUpdate);
     }
 
     public Optional<Job> getJobById(Long id){
