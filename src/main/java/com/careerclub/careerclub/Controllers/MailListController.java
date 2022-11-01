@@ -32,8 +32,6 @@ public class MailListController {
     @GetMapping
     public ResponseEntity<List<MailList>> getAllSubscription(){
         var lists = mailListService.getAllSubscription();
-
-
         return ResponseEntity.ok(lists);
     }
 

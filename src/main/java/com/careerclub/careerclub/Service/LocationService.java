@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Service;
 
+import com.careerclub.careerclub.Advice.DuplicateException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.LocationCreateRequest;
 import com.careerclub.careerclub.Entities.Location;
@@ -22,48 +23,51 @@ public class LocationService {
         return locationRepository.findAll();
     }
 
-    public Optional<Location> getLocationByName(String name){
-        var location = locationRepository.findByName(name);
-        if(location.isEmpty()){
-            throw new RecordNotFoundException("Location with the name "+name+" doesn't exist");
-        }
-        return location;
-    }
 
     public Optional<Location> getLocationById(Long id){
         var location = locationRepository.findById(id);
         if(location.isEmpty()){
-            throw new RecordNotFoundException("Location with id "+id+" doesn't exist.");
+            throw new RecordNotFoundException("Location with the given id doesn't exist.");
         }
         return location;
     }
 
     public Location createLocation(LocationCreateRequest locationCreateRequest){
         var location = new Location();
+        var locationName = locationRepository.findByName(locationCreateRequest.getName());
+        if(locationName.isPresent()){
+            throw new DuplicateException("Location with the given name already exists");
+        }
+
         location.setName(locationCreateRequest.getName());
         locationRepository.save(location);
+
         return  location;
     }
 
-    public Optional<Location> updateLocation(String name,LocationCreateRequest locationCreateRequest){
-        var location = locationRepository.findByName(name);
+    public Optional<Location> updateLocation(Long locationId,LocationCreateRequest locationCreateRequest){
+        var location = locationRepository.findById(locationId);
+        var locationName = locationRepository.findByName(locationCreateRequest.getName());
+        if(locationName.isPresent()){
+            throw new DuplicateException("Location with the given name already exists");
+        }
         location.ifPresentOrElse(l->{
             l.setName(locationCreateRequest.getName());
             locationRepository.save(l);
         },()->{
-            throw new RecordNotFoundException("Location with name "+name+" doesn't exist.");
+            throw new RecordNotFoundException("Location with the given id doesn't exist.");
         });
         return location;
     }
 
-    public HashMap<Object,Object> deleteLocation(String name){
+    public HashMap<Object,Object> deleteLocation(Long locationId){
         var validate = new HashMap<>();
-        var location = locationRepository.findByName(name);
+        var location = locationRepository.findById(locationId);
         location.ifPresentOrElse(l->{
             locationRepository.delete(l);
             validate.put("message","Location deleted successfully.");
         },()->{
-            throw new RecordNotFoundException("Location with the name "+name+" doesn't exist.");
+            throw new RecordNotFoundException("Location with the given id doesn't exist.");
         });
         return validate;
     }

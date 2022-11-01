@@ -40,18 +40,12 @@ public class IndustryController {
         return ResponseEntity.of(industry);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<Industry> getSingleIndustryByName(@PathVariable String name){
-        var industry = industryService.getIndustryByName(name);
-        return ResponseEntity.of(industry);
-    }
-
     @PostMapping("/create")
     public ResponseEntity<?> createIndustry(@Valid @RequestBody IndustryCreationRequest industryCreationRequest, BindingResult errors){
         industryValidator.validate(industryCreationRequest,errors);
         if(!errors.hasErrors()){
             var industry = industryService.createIndustry(industryCreationRequest);
-            return ResponseEntity.ok(industry);
+            return ResponseEntity.status(201).body(industry);
         }
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
@@ -66,9 +60,9 @@ public class IndustryController {
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
 
-    @DeleteMapping("/delete/{name}")
-    public ResponseEntity<HashMap<Object,Object>> deleteIndustry(@PathVariable String name){
-        var message = industryService.deleteIndustry(name);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HashMap<Object,Object>> deleteIndustry(@PathVariable Long id){
+        var message = industryService.deleteIndustry(id);
         return ResponseEntity.ok(message);
     }
 

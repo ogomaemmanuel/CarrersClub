@@ -2,7 +2,7 @@ package com.careerclub.careerclub.DTOs;
 
 public class AddRoleToUserRequest {
     private Long userId;
-    private String roleName;
+    private Long roleId;
 
     public Long getUserId() {
         return userId;
@@ -12,11 +12,11 @@ public class AddRoleToUserRequest {
         this.userId = userId;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 }

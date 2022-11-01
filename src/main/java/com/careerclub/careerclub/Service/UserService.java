@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Service;
 
+import com.careerclub.careerclub.Advice.BadRequestException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.UserCreationRequest;
 import com.careerclub.careerclub.DTOs.UserUpdateRequest;
@@ -33,7 +34,7 @@ public class UserService {
     public Optional<User> getSingleUserById(Long id){
         var user = userRepository.findById(id);
         if(user.isEmpty()){
-            throw new RecordNotFoundException("User with id "+id+" doesn't exist.");
+            throw new RecordNotFoundException("User with the given id doesn't exist.");
         }
         return user;
     }
@@ -48,7 +49,7 @@ public class UserService {
             userRepository.save(user);
             return user;
         }else {
-            throw new RecordNotFoundException("Email format provided is invalid.");
+            throw new BadRequestException("Email format provided is invalid.");
         }
 
     }
@@ -65,7 +66,7 @@ public class UserService {
             }
             userRepository.save(u);
         },()->{
-            throw new RecordNotFoundException("User with id "+id+" doesn't exist 🚫");
+            throw new RecordNotFoundException("User with the given id  doesn't exist");
         });
 
         return user;
@@ -78,7 +79,7 @@ public class UserService {
             userRepository.delete(u);
             validate.put("message","User deleted successfully ✅");
         },()->{
-            throw new RecordNotFoundException("User with id "+id+" doesn't exist 🚫");
+            throw new RecordNotFoundException("User with the given id  doesn't exist");
         });
 
         return validate;

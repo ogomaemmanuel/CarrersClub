@@ -40,7 +40,7 @@ public class JobsController {
         //Add a get link
         var jobWithLink = jobResourceAssembler.toModel(job);
 
-        return ResponseEntity.ok(jobWithLink);
+        return ResponseEntity.status(201).body(jobWithLink);
     }
     @DeleteMapping("/delete/{id}")
     public void deleteJob(@PathVariable Long id){

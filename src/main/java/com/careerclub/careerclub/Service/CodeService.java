@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Service;
 
+import com.careerclub.careerclub.Advice.BadRequestException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.CodeVerificationRequest;
 import com.careerclub.careerclub.Entities.Code;
@@ -77,7 +78,7 @@ public class CodeService {
                 var attempt = new CodeAttempt();
                 attempt.setUser(user);
                 codeAttemptRepository.save(attempt);
-                throw new RecordNotFoundException("Code is invalid.");
+                throw new BadRequestException("Code is invalid.");
             }
         }else{
             throw new RecordNotFoundException("Code trial attempts exceeded.");
