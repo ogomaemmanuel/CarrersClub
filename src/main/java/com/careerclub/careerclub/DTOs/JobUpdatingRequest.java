@@ -8,15 +8,16 @@ public class JobUpdatingRequest {
     private String qualification;
     private String deadline;
 
-    public JobType getJobTypeId() {
+
+    private Long jobTypeId;
+
+    public Long getJobTypeId() {
         return jobTypeId;
     }
 
-    public void setJobTypeId(JobType jobTypeId) {
+    public void setJobTypeId(Long jobTypeId) {
         this.jobTypeId = jobTypeId;
     }
-
-    private JobType jobTypeId;
 
     public String getDescription() {
         return description;
