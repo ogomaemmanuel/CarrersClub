@@ -5,6 +5,8 @@ import com.careerclub.careerclub.Service.SaveJobService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("save_job")
 public class SaveJobController {
@@ -22,8 +24,10 @@ public class SaveJobController {
 
     @PostMapping("/save")
     public ResponseEntity<?> saveJob(@RequestBody SaveJobRequest saveJobRequest){
+        var message = new HashMap<>();
         var jobs_saved = saveJobService.saveJob(saveJobRequest);
-        return ResponseEntity.ok(jobs_saved);
+        message.put("message",jobs_saved);
+        return ResponseEntity.ok(message);
     }
 
 }
