@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("save_job")
+@RequestMapping("save-job")
 public class SaveJobController {
     private final SaveJobService saveJobService;
 
