@@ -41,23 +41,15 @@ public class IndustryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createIndustry(@Valid @RequestBody IndustryCreationRequest industryCreationRequest, BindingResult errors){
-        industryValidator.validate(industryCreationRequest,errors);
-        if(!errors.hasErrors()){
-            var industry = industryService.createIndustry(industryCreationRequest);
-            return ResponseEntity.status(201).body(industry);
-        }
-        return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
+    public ResponseEntity<?> createIndustry(@Valid @RequestBody IndustryCreationRequest industryCreationRequest){
+        var industry = industryService.createIndustry(industryCreationRequest);
+        return ResponseEntity.status(201).body(industry);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateIndustry(@PathVariable Long id, @RequestBody IndustryCreationRequest industryCreationRequest, BindingResult errors){
-        industryValidator.validate(industryCreationRequest,errors);
-        if(!errors.hasErrors()){
-            var industry = industryService.updateIndustry(id, industryCreationRequest);
-            return ResponseEntity.of(industry);
-        }
-        return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
+    public ResponseEntity<?> updateIndustry(@PathVariable Long id, @RequestBody IndustryCreationRequest industryCreationRequest){
+        var industry = industryService.updateIndustry(id, industryCreationRequest);
+        return ResponseEntity.of(industry);
     }
 
     @DeleteMapping("/delete/{id}")

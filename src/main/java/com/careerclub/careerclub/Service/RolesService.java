@@ -39,18 +39,23 @@ public class RolesService {
 
     public Roles createRole(RolesCreationRequest rolesCreationRequest){
         var fetchRole = rolesRepository.findByName(rolesCreationRequest.getName());
-        if(fetchRole==null) {
-            var role = new Roles();
-            role.setName(rolesCreationRequest.getName());
-            rolesRepository.save(role);
-            return role;
-        }
-        throw new DuplicateException("Role with the given name already exists.");
+        fetchRole.ifPresent(r->{
+            throw new DuplicateException("Role with the given name already exists.");
+        });
+        var role = new Roles();
+        role.setName(rolesCreationRequest.getName());
+        rolesRepository.save(role);
+        return role;
+
     }
 
     public Optional<Roles> updateRole(Long id, RolesUpdateRequest rolesUpdateRequest){
         var role = rolesRepository.findById(id);
+        var roleName = rolesRepository.findByName(rolesUpdateRequest.getName());
 
+        roleName.ifPresent(r->{
+            throw new DuplicateException("Role with the given name already exists.");
+        });
         role.ifPresentOrElse(r->{
             r.setName(rolesUpdateRequest.getName());
             rolesRepository.save(r);
@@ -66,9 +71,9 @@ public class RolesService {
         var role = rolesRepository.findById(id);
         role.ifPresentOrElse(r->{
             rolesRepository.delete(r);
-            validate.put("message","Role Deleted Successfully ✅");
+            validate.put("message","Role Deleted Successfully");
         },()->{
-            throw new RecordNotFoundException("Role with the given id doesn't exist 🚫");
+            throw new RecordNotFoundException("Role with the given id doesn't exist");
         });
 
         return validate;
@@ -83,7 +88,7 @@ public class RolesService {
             role.ifPresentOrElse(r->{
                 u.addRole(r);
                 userRepository.save(u);
-                validate.put("message","Role "+r.getName()+" added successfully to user with the username "+ u.getUsername()+" ✅");
+                validate.put("message","Role "+r.getName()+" added successfully to user with the username "+ u.getUsername());
             },()->{
                 throw new RecordNotFoundException("Role with the given id doesn't exist");
             });

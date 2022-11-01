@@ -55,7 +55,7 @@ public class AuthController {
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(@RequestBody TokenRefreshRequest refreshRequest) {
         var username = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userRepository.findByUsername(username.toString());
+        var user = userRepository.findByUsername(username.toString()).get();
         try {
             var jwt = Jwts.parserBuilder()
                     .setSigningKey(jwtRefreshSecret.getBytes()).build().parseClaimsJws(refreshRequest.getToken());

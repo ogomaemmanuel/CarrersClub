@@ -50,7 +50,10 @@ public class IndustryService {
 
     public Optional<Industry> updateIndustry(Long id, IndustryCreationRequest industryCreationRequest){
         var industry = industryRepository.findById(id);
-
+        var industryName = industryRepository.findByName(industryCreationRequest.getName());
+        industryName.ifPresent(i->{
+            throw new DuplicateException("Industry with the given name already exists.");
+        });
         industry.ifPresentOrElse(i->{
             i.setName(industryCreationRequest.getName());
             industryRepository.save(i);
