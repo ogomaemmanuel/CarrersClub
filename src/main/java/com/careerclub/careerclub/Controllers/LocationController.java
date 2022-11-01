@@ -39,24 +39,15 @@ public class LocationController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createLocation(@Valid @RequestBody LocationCreateRequest locationCreateRequest, BindingResult errors){
-        locationValidator.validate(locationCreateRequest,errors);
-        if(!(errors.hasErrors())){
-            var location = locationService.createLocation(locationCreateRequest);
-            return ResponseEntity.status(201).body(location);
-        }
-        return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
-
+    public ResponseEntity<?> createLocation(@Valid @RequestBody LocationCreateRequest locationCreateRequest){
+        var location = locationService.createLocation(locationCreateRequest);
+        return ResponseEntity.status(201).body(location);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateLocation(@PathVariable Long id,@Valid @RequestBody LocationCreateRequest locationCreateRequest,BindingResult errors){
-        locationValidator.validate(locationCreateRequest,errors);
-        if(!(errors.hasErrors())){
-            var location = locationService.updateLocation(id,locationCreateRequest);
-            return ResponseEntity.of(location);
-        }
-        return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
+    public ResponseEntity<?> updateLocation(@PathVariable Long id,@Valid @RequestBody LocationCreateRequest locationCreateRequest){
+        var location = locationService.updateLocation(id,locationCreateRequest);
+        return ResponseEntity.of(location);
     }
 
     @DeleteMapping("/delete/{id}")
