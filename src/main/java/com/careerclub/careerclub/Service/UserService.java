@@ -1,6 +1,7 @@
 package com.careerclub.careerclub.Service;
 
 import com.careerclub.careerclub.Advice.BadRequestException;
+import com.careerclub.careerclub.Advice.DuplicateException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.UserCreationRequest;
 import com.careerclub.careerclub.DTOs.UserUpdateRequest;
@@ -40,6 +41,14 @@ public class UserService {
     }
 
     public User createUser(UserCreationRequest userCreationRequest){
+        var emailCheck = userRepository.findByEmail(userCreationRequest.getEmail());
+        var usernameCheck = userRepository.findByUsername(userCreationRequest.getUsername());
+        if(emailCheck.isPresent()){
+            throw new DuplicateException("The given email address already exists.");
+        }
+        if(usernameCheck.isPresent()){
+            throw new DuplicateException("The given username already exists.");
+        }
         var emailIsValid = validate(userCreationRequest.getEmail());
         if(emailIsValid){
             var user = new User();
