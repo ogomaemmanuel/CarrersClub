@@ -53,10 +53,16 @@ public class MailListService {
         user.ifPresentOrElse(mailList::setUser,()->{
             throw new RecordNotFoundException("The given user id doesn't exist");
         });
-        industry.ifPresent(mailList::setIndustry);
-        location.ifPresent(mailList::setLocation);
+        industry.ifPresentOrElse(mailList::setIndustry,()->{
+            throw new RecordNotFoundException("The given industry doesn't exist");
+        });
+        location.ifPresentOrElse(mailList::setLocation,()->{
+            throw new RecordNotFoundException("The given location doesn't exist");
+        });
         if(jobType!=null){
             mailList.setJobType(jobType);
+        }else{
+            throw new RecordNotFoundException("The given job type doesn't exist");
         }
         return mailListRepository.save(mailList);
 

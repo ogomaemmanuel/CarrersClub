@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Service;
 
+import com.careerclub.careerclub.Advice.DuplicateException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.AddRoleToUserRequest;
 import com.careerclub.careerclub.DTOs.RolesCreationRequest;
@@ -27,18 +28,11 @@ public class RolesService {
         return rolesRepository.findAll();
     }
 
-    public Roles getSingleRoleByName(String name){
-        var role = rolesRepository.findByName(name);
-        if (role!=null) {
-            return role;
-        }
-        throw new RecordNotFoundException("Role with name, "+name+ ",doesn't exist 🚫");
-    }
 
     public Optional<Roles> getRoleById(Long id){
         var role = rolesRepository.findById(id);
         if(role.isEmpty()){
-            throw new RecordNotFoundException("Role with id "+id+" doesn't exist.");
+            throw new RecordNotFoundException("Role with the given id doesn't exist.");
         }
         return role;
     }
@@ -51,7 +45,7 @@ public class RolesService {
             rolesRepository.save(role);
             return role;
         }
-        throw new RecordNotFoundException("Role with name, "+rolesCreationRequest.getName()+", already exists.");
+        throw new DuplicateException("Role with the given name already exists.");
     }
 
     public Optional<Roles> updateRole(Long id, RolesUpdateRequest rolesUpdateRequest){
@@ -61,7 +55,7 @@ public class RolesService {
             r.setName(rolesUpdateRequest.getName());
             rolesRepository.save(r);
         },()->{
-            throw new RecordNotFoundException("Role with id "+id+" doesn't exist 🚫");
+            throw new RecordNotFoundException("Role with the given id doesn't exist");
         });
 
         return role;
@@ -74,7 +68,7 @@ public class RolesService {
             rolesRepository.delete(r);
             validate.put("message","Role Deleted Successfully ✅");
         },()->{
-            throw new RecordNotFoundException("Role with id "+id+" doesn't exist 🚫");
+            throw new RecordNotFoundException("Role with the given id doesn't exist 🚫");
         });
 
         return validate;
@@ -84,16 +78,18 @@ public class RolesService {
     public HashMap<Object,Object> addRoleToUser(AddRoleToUserRequest addRoleToUserRequest){
         var validate = new HashMap<>();
         var user = userRepository.findById(addRoleToUserRequest.getUserId());
-        var role = rolesRepository.findByName(addRoleToUserRequest.getRoleName());
+        var role = rolesRepository.findById(addRoleToUserRequest.getRoleId());
         user.ifPresentOrElse(u->{
-            if(role==null){
-                throw new RecordNotFoundException("Role with name, "+addRoleToUserRequest.getRoleName()+" doesn't exist 🚫");
-            }
-            u.addRole(role);
-            userRepository.save(u);
-            validate.put("message","Role "+role.getName()+" added successfully to user with the username "+ u.getUsername()+" ✅");
+            role.ifPresentOrElse(r->{
+                u.addRole(r);
+                userRepository.save(u);
+                validate.put("message","Role "+r.getName()+" added successfully to user with the username "+ u.getUsername()+" ✅");
+            },()->{
+                throw new RecordNotFoundException("Role with the given id doesn't exist");
+            });
+
         },()->{
-            throw new RecordNotFoundException("User with id, "+addRoleToUserRequest.getUserId()+" doesn't exist 🚫");
+            throw new RecordNotFoundException("User with the given id doesn't exist");
         });
         return validate;
     }

@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Service;
 
+import com.careerclub.careerclub.Advice.BadRequestException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.Auth.LoginRequest;
 import com.careerclub.careerclub.Config.WebSecurityConfig;
@@ -67,13 +68,13 @@ public class AuthService {
                     var token = generateAccessToken(jwtSecret, user.getUsername(), rolesClaim, Date.from(Instant.now().plusSeconds(300)));
                     return token;
                 } else {
-                    throw new RecordNotFoundException("Password is invalid.");
+                    throw new BadRequestException("Password is invalid.");
                 }
             } else {
                 throw new RecordNotFoundException("User doesn't exist.");
             }
         }else{
-            throw new RecordNotFoundException("Email format provided is invalid.");
+            throw new BadRequestException("Email format provided is invalid.");
         }
     }
 }

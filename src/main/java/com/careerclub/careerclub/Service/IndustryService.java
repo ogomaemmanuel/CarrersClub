@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Service;
 
+import com.careerclub.careerclub.Advice.DuplicateException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.IndustryUpdateRequest;
 import com.careerclub.careerclub.DTOs.IndustryCreationRequest;
@@ -26,25 +27,24 @@ public class IndustryService {
         return industries;
     }
 
-    public Optional<Industry> getIndustryByName(String name){
-        var industry = industryRepository.findByName(name);
-        if(industry.isEmpty()){
-            throw new RecordNotFoundException("Industry: "+name+" doesn't exist.");
-        }
-        return industry;
-    }
-
     public Optional<Industry> getIndustryById(Long id){
         var industry = industryRepository.findById(id);
         if(industry.isEmpty()){
-            throw new RecordNotFoundException("Industry with id "+id+" doesn't exist.");
+            throw new RecordNotFoundException("Industry with the given id doesn't exist.");
         }
         return industry;
     }
 
     public Industry createIndustry(IndustryCreationRequest industryCreationRequest){
         var industry = new Industry();
+        var industryName = industryRepository.findByName(industryCreationRequest.getName());
+        if(industryName.isPresent()){
+            throw new DuplicateException("Industry with the given name already exists.");
+        }
+
         industry.setName(industryCreationRequest.getName());
+
+
         return industryRepository.save(industry);
     }
 
@@ -55,19 +55,19 @@ public class IndustryService {
             i.setName(industryCreationRequest.getName());
             industryRepository.save(i);
         },()->{
-            throw new RecordNotFoundException("Industry with id "+id+" doesn't exist.");
+            throw new RecordNotFoundException("Industry with the given id doesn't exist.");
         });
         return industry;
     }
 
-    public HashMap<Object,Object> deleteIndustry(String name){
+    public HashMap<Object,Object> deleteIndustry(Long industryId){
         var validate = new HashMap<>();
-        var industry = industryRepository.findByName(name);
+        var industry = industryRepository.findById(industryId);
         industry.ifPresentOrElse(i->{
             industryRepository.delete(i);
-            validate.put("message","Industry "+name+" deleted successfully ✅");
+            validate.put("message","Industry deleted successfully ✅");
         },()->{
-            throw new RecordNotFoundException("Industry "+name+" doesn't exist.");
+            throw new RecordNotFoundException("Industry with the given id doesn't exist.");
         });
         return validate;
     }

@@ -42,6 +42,9 @@ public class ApplicationService {
 
     public Optional<Application> getApplicationById(Long id){
         var application = applicationRepository.findById(id);
+        if(application.isEmpty()){
+            throw new RecordNotFoundException("Application with the given id doesn't exist");
+        }
         return application;
     }
 
@@ -59,10 +62,10 @@ public class ApplicationService {
                 newApplication.setCvFileName(file.get(1));
                 applicationRepository.save(newApplication);
             },() -> {
-                throw new RecordNotFoundException("Job application doesn't exist");
+                throw new RecordNotFoundException("Job doesn't exist");
             });
         }, () -> {
-            throw new RecordNotFoundException("Company doesn't exist");
+            throw new RecordNotFoundException("User doesn't exist");
         });
         return newApplication;
     }

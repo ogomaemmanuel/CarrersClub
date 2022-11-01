@@ -1,4 +1,5 @@
 package com.careerclub.careerclub.Service;
+import com.careerclub.careerclub.Advice.DuplicateException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.Entities.Company;
 import com.careerclub.careerclub.DTOs.CompanyCreationRequest;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class CompanyService {
@@ -32,12 +34,16 @@ public class CompanyService {
     public Optional<Company> getCompanyById(Long id){
         var company = companyRepository.findById(id);
         if(company.isEmpty()){
-            throw new RecordNotFoundException("Company with id "+id+" doesn't exist.");
+            throw new RecordNotFoundException("Company with the given id doesn't exist.");
         }
         return company;
     }
 
     public Company createCompany(CompanyCreationRequest newCompany){
+        var companyName = companyRepository.findByName(newCompany.getName());
+        if(companyName.isPresent()){
+            throw new DuplicateException("Company with the given name already exists.");
+        }
         var company = new Company();
         company.setName(newCompany.getName());
         company.setDescription(newCompany.getDescription());
@@ -58,7 +64,7 @@ public class CompanyService {
             }
             companyRepository.save(c);
         },()->{
-            throw new RecordNotFoundException("Company with id "+id+" doesn't exist.");
+            throw new RecordNotFoundException("Company with the given id doesn't exist.");
         });
         return company;
     }
@@ -70,7 +76,7 @@ public class CompanyService {
             jobRepository.deleteAll(jobs);
             companyRepository.delete(company);
         }, ()->{
-            throw new RecordNotFoundException("Company doesn't exist");
+            throw new RecordNotFoundException("Company with the given id doesn't exist");
         });
         return "Company deleted successfully";
     }

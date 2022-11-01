@@ -32,12 +32,6 @@ public class LocationController {
         return ResponseEntity.ok(locations);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<Location> getLocationByName(@PathVariable String name){
-        var location = locationService.getLocationByName(name);
-        return ResponseEntity.of(location);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Location> getLocationById(@PathVariable Long id){
         var location = locationService.getLocationById(id);
@@ -49,25 +43,25 @@ public class LocationController {
         locationValidator.validate(locationCreateRequest,errors);
         if(!(errors.hasErrors())){
             var location = locationService.createLocation(locationCreateRequest);
-            return ResponseEntity.ok(location);
+            return ResponseEntity.status(201).body(location);
         }
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
 
     }
 
-    @PutMapping("/update/{name}")
-    public ResponseEntity<?> updateLocation(@PathVariable String name,@Valid @RequestBody LocationCreateRequest locationCreateRequest,BindingResult errors){
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateLocation(@PathVariable Long id,@Valid @RequestBody LocationCreateRequest locationCreateRequest,BindingResult errors){
         locationValidator.validate(locationCreateRequest,errors);
         if(!(errors.hasErrors())){
-            var location = locationService.updateLocation(name,locationCreateRequest);
+            var location = locationService.updateLocation(id,locationCreateRequest);
             return ResponseEntity.of(location);
         }
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
 
-    @DeleteMapping("/delete/{name}")
-    public ResponseEntity<HashMap<Object,Object>> deleteLocation(@PathVariable String name){
-        var message = locationService.deleteLocation(name);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HashMap<Object,Object>> deleteLocation(@PathVariable Long id){
+        var message = locationService.deleteLocation(id);
         return ResponseEntity.ok(message);
     }
 

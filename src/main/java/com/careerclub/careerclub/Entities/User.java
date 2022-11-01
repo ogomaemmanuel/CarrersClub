@@ -37,6 +37,10 @@ public class User implements UserDetails {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @OneToMany
+    @JoinColumn(name = "job_id")
+    private List<Job> savedJobs;
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -48,6 +52,17 @@ public class User implements UserDetails {
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     private List<Roles> roles;
+
+    public void addJob(Job job){
+        this.getSavedJobs().add(job);
+    }
+    public List<Job> getSavedJobs() {
+        return savedJobs==null?new ArrayList<>():savedJobs;
+    }
+
+    public void setSavedJobs(List<Job> savedJobs) {
+        this.savedJobs = savedJobs;
+    }
 
     public Long getId() {
         return id;
@@ -150,5 +165,6 @@ public class User implements UserDetails {
     public void encryptPassword(){
         this.password = WebSecurityConfig.passwordEncoder().encode(this.password);
     }
+
 
 }

@@ -42,11 +42,11 @@ public class CompanyController {
     @PostMapping("/create")
     public ResponseEntity<Company> createCompany(@RequestBody CompanyCreationRequest newCompany) {
         var company = companyService.createCompany(newCompany);
-        return ResponseEntity.ok(company);
+        return ResponseEntity.status(201).body(company);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteJob(@PathVariable Long id) {
+    public String deleteJob(@PathVariable Long id) {
         companyService.companyToDelete(id);
         return "Company deleted successfully";
     }

@@ -34,12 +34,6 @@ public class RolesController {
         return ResponseEntity.ok(roles);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<Roles> getSingleRoleByName(@PathVariable String name){
-        var role = rolesService.getSingleRoleByName(name);
-        return ResponseEntity.ok(role);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Roles> getRoleById(@PathVariable Long id){
         var role = rolesService.getRoleById(id);
@@ -51,7 +45,7 @@ public class RolesController {
         roleValidator.validate(rolesCreationRequest,errors);
         if(!errors.hasErrors()){
             var role = rolesService.createRole(rolesCreationRequest);
-            return ResponseEntity.ok(role);
+            return ResponseEntity.status(201).body(role);
         }
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }

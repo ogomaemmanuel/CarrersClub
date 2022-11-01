@@ -1,8 +1,8 @@
 package com.careerclub.careerclub.DTOs;
 
-public class AddRoleToUserRequest {
+public class SaveJobRequest {
     private Long userId;
-    private Long roleId;
+    private Long jobId;
 
     public Long getUserId() {
         return userId;
@@ -12,11 +12,11 @@ public class AddRoleToUserRequest {
         this.userId = userId;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public Long getJobId() {
+        return jobId;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
     }
 }

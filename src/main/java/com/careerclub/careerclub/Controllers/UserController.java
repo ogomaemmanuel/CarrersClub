@@ -55,7 +55,7 @@ public class UserController {
         if(!errors.hasErrors()){
         var user = userService.createUser(userCreationRequest);
         var userWithLinks = userResourceAssembler.toModel(user);
-        return ResponseEntity.ok(userWithLinks);
+        return ResponseEntity.status(201).body("Account created successfully");
         }
         return ResponseEntity.badRequest().body(ErrorConverter.convert(errors));
     }
