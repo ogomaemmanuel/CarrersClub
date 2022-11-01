@@ -2,6 +2,7 @@ package com.careerclub.careerclub.Seeders;
 
 import com.careerclub.careerclub.Entities.*;
 import com.careerclub.careerclub.Repositories.*;
+import com.careerclub.careerclub.Utils.Dateformat;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -94,11 +95,12 @@ public class DbSeeders implements CommandLineRunner {
             var testJobType = jobTypeRepository.findById(1L).get();
             var testIndustry = industryRepository.findById(1L).get();
             var testLocation = locationRepository.findById(1L).get();
+            var date = Dateformat.formatDate("08/12/2022");
             var job = new Job();
             job.setTitle("DevOps Engineer");
             job.setDescription("Development and Deploying");
             job.setJobType(testJobType);
-            job.setDeadline("08/12/2022");
+            job.setDeadline(date);
             job.setQualification("Docker & Kubernettes");
             job.setCompany(testCompany);
             job.setIndustry(testIndustry);
