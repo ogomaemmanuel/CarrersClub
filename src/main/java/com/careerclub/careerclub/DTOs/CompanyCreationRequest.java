@@ -1,9 +1,14 @@
 package com.careerclub.careerclub.DTOs;
 
+import org.hibernate.validator.constraints.URL;
+
+import javax.validation.constraints.NotBlank;
+
 public class CompanyCreationRequest {
 
     private String name;
     private String description;
+    @URL
     private String link;
 
      public String getName(){
