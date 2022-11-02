@@ -38,17 +38,6 @@ public class RolesServiceTest {
         verify(rolesRepository).findAll();
     }
 
-    @ParameterizedTest
-    @CsvSource(textBlock = """
-            admin,
-            member
-            """)
-    @DisplayName("Testing single role retrieval by name")
-    public void test_single_role(String roleName){
-        when(rolesRepository.findByName(any(String.class))).thenReturn(new Roles());
-        rolesService.getSingleRoleByName(roleName);
-        verify(rolesRepository).findByName(roleName);
-    }
 
     @Test
     @DisplayName("Testing roll creation")

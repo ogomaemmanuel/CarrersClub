@@ -40,13 +40,6 @@ public class IndustryServiceTest {
         verify(industryRepository).findAll();
     }
 
-    @Test
-    @DisplayName("Testing industry retrieval by name")
-    public void test_industry_name(){
-        when(industryRepository.findByName(any(String.class))).thenReturn(Optional.of(new Industry()));
-        industryService.getIndustryByName("it");
-        verify(industryRepository).findByName(any(String.class));
-    }
 
     @Test
     @DisplayName("Testing industry retrieval by id")

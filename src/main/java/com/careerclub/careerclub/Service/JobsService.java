@@ -89,8 +89,7 @@ public class JobsService {
     }
 
     public Optional<Job> getJobById(Long id){
-        var job = jobRepository.findById(id);
-        return job;
+        return jobRepository.findById(id);
     }
 
     public String jobToDelete(Long id){

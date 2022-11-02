@@ -1,5 +1,8 @@
 package com.careerclub.careerclub;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +17,7 @@ import java.util.Map;
 @SpringBootApplication
 @EnableAsync
 @EnableScheduling
+@SecurityScheme(name = "basic-auth",scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class CareerClubApplication {
 
 	@Bean(name="workExecutor")

@@ -57,11 +57,6 @@ public class RolesControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/roles/{id}",1)).andExpect(status().isNotFound());
     }
 
-    @Test
-    @DisplayName("testing get role by name")
-    public void test_get_role_by_name() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/roles/name/{name}","admin")).andExpect(status().isOk());
-    }
 
     @Test
     @DisplayName("testing role creation endpoint")
@@ -71,7 +66,7 @@ public class RolesControllerTest {
         String rl = objectMapper.writeValueAsString(role);
         mockMvc.perform(MockMvcRequestBuilders.post("/roles/create")
                 .content(rl)
-                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
     }
 
     @Test
@@ -96,7 +91,7 @@ public class RolesControllerTest {
     public void test_role_add_to_user() throws Exception{
         var roleToAdd = new AddRoleToUserRequest();
         roleToAdd.setUserId(1L);
-        roleToAdd.setRoleName("admin");
+        roleToAdd.setRoleId(1L);
         String rlToAdd = objectMapper.writeValueAsString(roleToAdd);
         mockMvc.perform(MockMvcRequestBuilders.post("/roles/add-role")
                 .content(rlToAdd)

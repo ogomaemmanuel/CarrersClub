@@ -34,13 +34,6 @@ public class LocationServiceTest {
         verify(locationRepository).findAll();
     }
 
-    @Test
-    @DisplayName("Testing location retrieval by name")
-    public void test_location_by_name(){
-        when(locationRepository.findByName(any(String.class))).thenReturn(Optional.of(new Location()));
-        locationService.getLocationByName("nairobi");
-        verify(locationRepository).findByName(any(String.class));
-    }
 
     @Test
     @DisplayName("Testing location retrieval by id")
@@ -67,7 +60,7 @@ public class LocationServiceTest {
         when(locationRepository.save(any(Location.class))).thenReturn(new Location());
         var location = new LocationCreateRequest();
         location.setName("nairobi");
-        locationService.updateLocation("naivasha",location);
+        locationService.updateLocation(1L,location);
         verify(locationRepository).save(any(Location.class));
         verify(locationRepository).findByName(any(String.class));
     }
@@ -77,7 +70,7 @@ public class LocationServiceTest {
     public void test_location_deletion(){
         when(locationRepository.findByName(any(String.class))).thenReturn(Optional.of(new Location()));
         doNothing().when(locationRepository).delete(any(Location.class));
-        locationService.deleteLocation("naivasha");
+        locationService.deleteLocation(1L);
         verify(locationRepository).delete(any(Location.class));
     }
 

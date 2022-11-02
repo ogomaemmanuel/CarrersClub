@@ -70,7 +70,7 @@ public class LocationControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/locations/create")
                 .content(lct)
                 .contentType(MediaType.APPLICATION_JSON
-                )).andExpect(status().isOk());
+                )).andExpect(status().isCreated());
 
     }
 
@@ -88,7 +88,7 @@ public class LocationControllerTest {
     @Test
     @DisplayName("testing location deletion endpoint")
     public void test_location_deletion() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.delete("/locations/delete/{name}","nairobi")).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.delete("/locations/delete/{name}","nairobi")).andExpect(status().isBadRequest());
     }
 
 }

@@ -35,7 +35,7 @@ public class CompanyServiceTest {
 
     @Test
     @DisplayName("Testing company creation")
-    public void test_compant_create(){
+    public void test_company_create(){
         when(companyRepository.save(any(Company.class))).thenReturn(new Company());
         var company = new CompanyCreationRequest();
         company.setName("Testing Plc");

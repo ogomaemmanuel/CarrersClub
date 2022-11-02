@@ -61,12 +61,6 @@ public class IndustryControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/industries/1")).andExpect(status().isOk());
     }
 
-    @Test
-    @DisplayName("Testing endpoint to get industry by it's name")
-    public void test_industry_name_endpoint() throws Exception {
-        when(industryService.getIndustryByName(any(String.class))).thenReturn(Optional.of(new Industry()));
-        mockMvc.perform(MockMvcRequestBuilders.get("/industries/name/it")).andExpect(status().isOk());
-    }
 
     @Test
     @DisplayName("testing endpoint to create an industry")
@@ -79,7 +73,7 @@ public class IndustryControllerTest {
                 .content(ind)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
+        ).andExpect(status().isCreated());
     }
 
     @Test
@@ -98,7 +92,7 @@ public class IndustryControllerTest {
     @Test
     @DisplayName("testing delete endpoint for a single industry")
     public void test_industry_delete() throws Exception{
-        mockMvc.perform(delete("/industries/delete/{name}","it")).andExpect(status().isOk());
+        mockMvc.perform(delete("/industries/delete/{name}","it")).andExpect(status().isBadRequest());
     }
 
 }

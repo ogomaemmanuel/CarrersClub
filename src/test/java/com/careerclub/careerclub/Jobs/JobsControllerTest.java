@@ -27,6 +27,9 @@ public class JobsControllerTest {
     @MockBean
     JobsService jobsService;
 
+    @MockBean
+    JobsController jobsController;
+
     @Autowired
     ObjectMapper objectMapper;
 
@@ -36,6 +39,6 @@ public class JobsControllerTest {
     @Test
     @DisplayName("testing job retrieval by id")
     public void test_job_id() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/jobs/{id}",1)).andExpect(status().isNotFound());
+        mockMvc.perform(MockMvcRequestBuilders.get("/jobs/{id}",1)).andExpect(status().isOk());
     }
 }
