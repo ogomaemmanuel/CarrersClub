@@ -15,7 +15,7 @@ public class Company extends RepresentationModel<Company>{
 
     private String description;
 
-    @URL
+
     private String link;
 
     public Long getId(){
