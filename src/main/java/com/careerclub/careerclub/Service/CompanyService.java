@@ -54,18 +54,18 @@ public class CompanyService {
             throw new DuplicateException("Company with the given name already exists.");
         }
         //Url validation
-        String regex = "((http|https)://)(www.)?"
-                + "[a-zA-Z0-9@:%._\\+~#?&//=]"
-                + "{2,256}\\.[a-z]"
-                + "{2,6}\\b([-a-zA-Z0-9@:%"
-                + "._\\+~#?&//=]*)";
-
-        Pattern p = compile(regex);
-        var link = newCompany.getLink();
-
-        if(!p.matcher(link).matches()){
-            throw new BadRequestException("The given url isn't valid.");
-        }
+//        String regex = "((http|https)://)(www.)?"
+//                + "[a-zA-Z0-9@:%._\\+~#?&//=]"
+//                + "{2,256}\\.[a-z]"
+//                + "{2,6}\\b([-a-zA-Z0-9@:%"
+//                + "._\\+~#?&//=]*)";
+//
+//        Pattern p = compile(regex);
+//        var link = newCompany.getLink();
+//
+//        if(!p.matcher(link).matches()){
+//            throw new BadRequestException("The given url isn't valid.");
+//        }
 
         var company = new Company();
         company.setName(newCompany.getName());
