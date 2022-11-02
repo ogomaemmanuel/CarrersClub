@@ -40,7 +40,7 @@ public class CompanyController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Company> createCompany(@RequestBody CompanyCreationRequest newCompany) {
+    public ResponseEntity<Company> createCompany(@Valid @RequestBody CompanyCreationRequest newCompany) {
         var company = companyService.createCompany(newCompany);
         return ResponseEntity.status(201).body(company);
     }
