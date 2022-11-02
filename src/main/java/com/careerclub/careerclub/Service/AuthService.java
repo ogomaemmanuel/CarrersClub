@@ -56,7 +56,7 @@ public class AuthService {
 
                     //Code send via email
                     var emailDetails = new EmailDetails();
-                    emailDetails.setMsgBody(newCode.getCode());
+                    emailDetails.setMsgBody(code);
                     emailDetails.setRecipient(user.getEmail());
                     emailDetails.setSubject("Career Club Security verification code.");
                     emailServiceImplement.sendSimpleMail(emailDetails);

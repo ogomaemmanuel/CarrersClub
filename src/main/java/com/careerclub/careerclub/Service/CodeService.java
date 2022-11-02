@@ -10,6 +10,7 @@ import com.careerclub.careerclub.Repositories.CodeAttemptRepository;
 import com.careerclub.careerclub.Repositories.CodeRepository;
 import com.careerclub.careerclub.Repositories.RolesRepository;
 import com.careerclub.careerclub.Repositories.UserRepository;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class CodeService {
         var usernameCode = codeRepository.findByUser(user);
         var previousAttempts= codeAttemptRepository.countCodeAttemptByUserOrderByCreatedAt(user.getId(), LocalDateTime.now().minusMinutes(5));
         if(previousAttempts==null || previousAttempts <= 5){
-            if(usernameCode.getCode().equals(codeVerificationRequest.getCode())){
+            if(usernameCode.getCode().equals(DigestUtils.sha256Hex(codeVerificationRequest.getCode()))){
                 var validate = new HashMap<>();
 
                 //Add member role to user
