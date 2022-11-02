@@ -1,24 +1,20 @@
 package com.careerclub.careerclub.Service;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
-import com.careerclub.careerclub.DTOs.ApplicationRequest;
 import com.careerclub.careerclub.DTOs.CvDownloadRequest;
 import com.careerclub.careerclub.Entities.Application;
 import com.careerclub.careerclub.Repositories.ApplicationRepository;
 import com.careerclub.careerclub.Repositories.JobRepository;
 import com.careerclub.careerclub.Repositories.UserRepository;
+import com.careerclub.careerclub.Utils.EmailDetails;
 import com.careerclub.careerclub.Utils.FileUpload;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,12 +23,14 @@ public class ApplicationService {
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
     private final AmazonS3 amazonS3;
+    private final EmailServiceImplement emailServiceImplement;
 
-    public ApplicationService(ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, AmazonS3 amazonS3) {
+    public ApplicationService(ApplicationRepository applicationRepository, JobRepository jobRepository, UserRepository userRepository, AmazonS3 amazonS3, EmailServiceImplement emailServiceImplement) {
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
         this.amazonS3 = amazonS3;
+        this.emailServiceImplement = emailServiceImplement;
     }
 
     public List<Application> getAllApplications(){
@@ -61,6 +59,10 @@ public class ApplicationService {
                 newApplication.setCvPath(file.get(0));
                 newApplication.setCvFileName(file.get(1));
                 applicationRepository.save(newApplication);
+                var emailDetails = new EmailDetails();
+                emailDetails.setRecipient(u.getEmail());
+                emailDetails.setSubject("You have applied for "+ " "+j.getTitle() + "at " +j.getCompany().getName());
+                emailServiceImplement.sendSimpleMail(emailDetails);
             },() -> {
                 throw new RecordNotFoundException("Job doesn't exist");
             });
