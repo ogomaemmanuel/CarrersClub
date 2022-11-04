@@ -38,12 +38,18 @@ public class AuthService {
         //Email Validation
         var emailIsValidate = validate(loginRequest.getEmail());
         if(emailIsValidate) {
-            var user = userRepository.findByEmail(loginRequest.getEmail()).get();
+            var user = userRepository.findByEmail(loginRequest.getEmail())
+                    .orElseThrow(()->new RecordNotFoundException("User with this email " + loginRequest.getEmail()+ " not found"));
             if (user != null) {
                 var rolesClaim = new HashMap<String, Object>();
                 if (WebSecurityConfig.passwordEncoder().matches(loginRequest.getPassword(), user.getPassword())) {
-                    //Deletes All Existing codes
-                    codeRepository.deleteAllByUserId(user.getId());
+                    //Get user codes count
+                    var amount = codeRepository.countByUser(user);
+
+                    if(amount>0){
+                        codeRepository.deleteAllByUserId(user.getId());
+                    }
+
 
                     //Generate Code
                     var code = generate();
