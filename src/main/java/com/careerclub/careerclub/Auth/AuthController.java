@@ -1,5 +1,6 @@
 package com.careerclub.careerclub.Auth;
 
+import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.Entities.Roles;
 import com.careerclub.careerclub.Repositories.CodeRepository;
 import com.careerclub.careerclub.Repositories.UserRepository;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +57,7 @@ public class AuthController {
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(@RequestBody TokenRefreshRequest refreshRequest) {
         var username = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userRepository.findByUsername(username.toString()).get();
+        var user = userRepository.findByUsername(username.toString()).orElseThrow(()->new RecordNotFoundException("User with username " + username+ " not found"));
         try {
             var jwt = Jwts.parserBuilder()
                     .setSigningKey(jwtRefreshSecret.getBytes()).build().parseClaimsJws(refreshRequest.getToken());

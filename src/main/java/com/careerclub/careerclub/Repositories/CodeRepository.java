@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface CodeRepository extends JpaRepository<Code,Long> {
     Code findByUser(User user);
     void deleteAllByUserId(Long id);
+
+    Long countByUser(User user);
+
 }
