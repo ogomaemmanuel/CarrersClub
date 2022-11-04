@@ -9,6 +9,9 @@ import com.careerclub.careerclub.Service.JobsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +24,19 @@ public class JobsController {
     private final JobsService jobsService;
     private final JobResourceAssembler jobResourceAssembler;
 
-    public JobsController(JobsService jobsService, JobResourceAssembler jobResourceAssembler) {
+    private final PagedResourcesAssembler<Job> jobPagedResourcesAssembler;
+
+    public JobsController(JobsService jobsService, JobResourceAssembler jobResourceAssembler, PagedResourcesAssembler<Job> jobPagedResourcesAssembler) {
         this.jobsService = jobsService;
         this.jobResourceAssembler = jobResourceAssembler;
+        this.jobPagedResourcesAssembler = jobPagedResourcesAssembler;
     }
 
     @GetMapping
-    public ResponseEntity<Page<Job>> getAllJobs(JobsFilter jobsFilter, Pageable pageable){
-        return  ResponseEntity.ok(jobsService.getAllJobs(jobsFilter,pageable));
+    public ResponseEntity<PagedModel<EntityModel<Job>>> getAllJobs(JobsFilter jobsFilter, Pageable pageable){
+        var jobs= jobPagedResourcesAssembler.toModel(jobsService.getAllJobs(jobsFilter,pageable),jobResourceAssembler);
+
+        return  ResponseEntity.ok(jobs);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id){

@@ -1,6 +1,7 @@
 package com.careerclub.careerclub.Entities;
 
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -54,4 +55,12 @@ public class Code {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    @PrePersist
+    public void messageDigest() {
+        this.code= DigestUtils.sha256Hex(this.getCode());
+    }
+
+
 }
+
