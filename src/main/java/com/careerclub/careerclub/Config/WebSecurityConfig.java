@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/roles/**","/jobs").permitAll()
                 .antMatchers("/auth/login","/users/**").permitAll()
                 .antMatchers("/auth/refresh-token").hasAnyAuthority("admin","member","hr")
-                .anyRequest().permitAll().and()
+                .anyRequest().authenticated().and()
                 .addFilterBefore(jwtfilter, BasicAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic();

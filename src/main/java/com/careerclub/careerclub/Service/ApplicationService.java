@@ -2,6 +2,7 @@ package com.careerclub.careerclub.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.S3Object;
+import com.careerclub.careerclub.Advice.DuplicateException;
 import com.careerclub.careerclub.Advice.RecordNotFoundException;
 import com.careerclub.careerclub.DTOs.CvDownloadRequest;
 import com.careerclub.careerclub.Entities.Application;
@@ -52,6 +53,10 @@ public class ApplicationService {
         var job = jobRepository.findById(jobId);
         user.ifPresentOrElse(u -> {
             job.ifPresentOrElse(j -> {
+                var application = applicationRepository.findByJobIdAndUserId(j.getId(),u.getId());
+                if(application.isPresent()){
+                    throw new DuplicateException("You have already applied for this job.");
+                }
                 var fileUpload = new FileUpload(amazonS3);
                 var file = fileUpload.upload(cv);
                 newApplication.setJob(j);
