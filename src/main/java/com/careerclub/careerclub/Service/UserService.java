@@ -40,6 +40,14 @@ public class UserService {
         return user;
     }
 
+    public Optional<User> getUserByUsername(String username){
+        var user = userRepository.findByUsername(username);
+        if(user.isEmpty()){
+            throw  new RecordNotFoundException("User with the given username doesn't exist");
+        }
+        return user;
+    }
+
     public User createUser(UserCreationRequest userCreationRequest){
         var emailCheck = userRepository.findByEmail(userCreationRequest.getEmail());
         var usernameCheck = userRepository.findByUsername(userCreationRequest.getUsername());
@@ -66,13 +74,9 @@ public class UserService {
     public Optional<User> updateUser(Long id, UserUpdateRequest userUpdateRequest){
         var user = userRepository.findById(id);
         user.ifPresentOrElse(u->{
-            if(userUpdateRequest.getPhoneNumber()!=null){
-                u.setPhoneNumber(userUpdateRequest.getPhoneNumber());
-            }else if (userUpdateRequest.getProfession()!=null){
-                u.setProfession(userUpdateRequest.getProfession());
-            }else if(userUpdateRequest.getBio()!=null){
-                u.setBio(userUpdateRequest.getBio());
-            }
+            u.setPhoneNumber(userUpdateRequest.getPhoneNumber());
+            u.setProfession(userUpdateRequest.getProfession());
+            u.setBio(userUpdateRequest.getBio());
             userRepository.save(u);
         },()->{
             throw new RecordNotFoundException("User with the given id  doesn't exist");

@@ -39,10 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/code/**").hasAnyAuthority("admin","otp")
-                .antMatchers("/roles/**").permitAll()
+                .antMatchers("/roles/**","/jobs").permitAll()
                 .antMatchers("/auth/login","/users/**").permitAll()
                 .antMatchers("/auth/refresh-token").hasAnyAuthority("admin","member","hr")
-                .anyRequest().authenticated().and()
+                .anyRequest().permitAll().and()
                 .addFilterBefore(jwtfilter, BasicAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic();
