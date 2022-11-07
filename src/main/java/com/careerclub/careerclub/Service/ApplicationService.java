@@ -66,6 +66,7 @@ public class ApplicationService {
                 applicationRepository.save(newApplication);
                 var emailDetails = new EmailDetails();
                 emailDetails.setRecipient(u.getEmail());
+                System.out.println(u.getEmail());
                 emailDetails.setSubject("You have applied for "+ " "+j.getTitle() + "at " +j.getCompany().getName());
                 emailServiceImplement.sendSimpleMail(emailDetails);
             },() -> {
