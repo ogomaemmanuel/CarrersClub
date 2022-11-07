@@ -48,6 +48,12 @@ public class UserController {
         return ResponseEntity.of(user);
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getUserByUserName(@PathVariable String username){
+        var user = userService.getUserByUsername(username);
+        return ResponseEntity.of(user);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserCreationRequest userCreationRequest){
             var validate = new HashMap<>();

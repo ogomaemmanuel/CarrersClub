@@ -37,6 +37,14 @@ public class MailListService {
         return mailListRepository.findAll();
     }
 
+    public List<MailList> getAllMailsOfUser(Long userId){
+        var user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            throw new RecordNotFoundException("User doesn't exists");
+        }
+        return mailListRepository.findAllByUserId(user.get().getId());
+    }
+
     public MailList subscribeToMailList(MailListSubscribeRequest mailListSubscribeRequest){
         //User Making request
 //        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

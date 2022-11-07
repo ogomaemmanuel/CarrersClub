@@ -35,6 +35,12 @@ public class MailListController {
         return ResponseEntity.ok(lists);
     }
 
+    @GetMapping("/mails/{userId}")
+    public ResponseEntity<?> getAllMailsOfUser(@PathVariable Long userId){
+        var mails = mailListService.getAllMailsOfUser(userId);
+        return ResponseEntity.ok(mails);
+    }
+
     @PostMapping("/subscribe")
     public ResponseEntity<?> subscribeToList(@Valid @RequestBody MailListSubscribeRequest mailListSubscribeRequest){
         var mailList = mailListService.subscribeToMailList(mailListSubscribeRequest);

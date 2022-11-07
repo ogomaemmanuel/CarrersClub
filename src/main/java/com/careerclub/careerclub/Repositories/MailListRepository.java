@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 public interface MailListRepository extends JpaRepository<MailList,Long> {
     Optional<MailList> findByIdAndUserId(Long id,Long userId);
-    List<MailList> findAllByIndustry(Industry industry);
+    List<MailList> findAllByUserId(Long userId);
+
 }
