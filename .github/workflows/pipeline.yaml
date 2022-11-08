@@ -29,9 +29,9 @@ jobs:
         run: ./mvnw package -DskipTests
       - name: Archive jar files to be used in deploy step
         uses: actions/upload-artifact@v3
-          with:
-            name: jobs-app
-            path: target/*.jar
+        with:
+          name: jobs-app
+          path: target/*.jar
 
 
 
