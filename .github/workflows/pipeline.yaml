@@ -15,6 +15,7 @@ jobs:
     - name: Runs test
       run: ./mvnw test
   package:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout from repo
