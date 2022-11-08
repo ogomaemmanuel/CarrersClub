@@ -14,5 +14,26 @@ jobs:
         cache: 'maven'
     - name: Runs test
       run: ./mvnw test
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout from repo
+        uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Package using maven
+        run: ./mvnw package -DskipTests
+      - name: Archive jar files to be used in deploy step
+          uses: actions/upload-artifact@v3
+          with:
+            name: jobs-app
+            path: target/*.jar
+
+
+
 
 
